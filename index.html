@@ -11,18 +11,21 @@
       padding: 0;
       background: #f8f8f8;
     }
+
     header {
       background: #ff4081;
       color: white;
       padding: 15px;
       text-align: center;
     }
+
     .container {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
       gap: 20px;
       padding: 20px;
     }
+
     .product {
       background: white;
       padding: 15px;
@@ -30,17 +33,21 @@
       box-shadow: 0 2px 5px rgba(0,0,0,0.1);
       text-align: center;
     }
+
     .product img {
       width: 100%;
       border-radius: 8px;
     }
+
     .product h3 {
       margin: 10px 0;
     }
+
     .product p {
       font-size: 14px;
       color: #555;
     }
+
     .product button {
       margin-top: 10px;
       padding: 10px;
@@ -49,7 +56,10 @@
       color: white;
       border-radius: 5px;
       cursor: pointer;
+      width: 100%;
+      font-size: 16px;
     }
+
     .cart {
       position: fixed;
       top: 0;
@@ -60,18 +70,24 @@
       box-shadow: -2px 0 5px rgba(0,0,0,0.2);
       padding: 20px;
       overflow-y: auto;
+      transition: all 0.3s ease;
+      z-index: 1000;
     }
+
     .cart h2 {
       margin-top: 0;
     }
+
     .cart ul {
       list-style: none;
       padding: 0;
     }
+
     .cart ul li {
       margin: 10px 0;
       font-size: 14px;
     }
+
     .order-btn {
       margin-top: 15px;
       display: block;
@@ -82,6 +98,89 @@
       text-decoration: none;
       border-radius: 8px;
       font-weight: bold;
+      font-size: 16px;
+    }
+
+    /* Cart toggle button for mobile */
+    .cart-toggle {
+      display: none;
+      position: fixed;
+      bottom: 10px;
+      right: 10px;
+      background: #ff4081;
+      color: white;
+      border: none;
+      padding: 12px;
+      border-radius: 50%;
+      font-size: 18px;
+      cursor: pointer;
+      z-index: 1100;
+    }
+
+    /* RESPONSIVE STYLES */
+    @media (max-width: 1024px) {
+      .cart {
+        width: 250px;
+      }
+    }
+
+    @media (max-width: 768px) {
+      .container {
+        padding: 15px;
+        gap: 15px;
+      }
+
+      .cart {
+        width: 100%;
+        height: auto;
+        position: fixed;
+        bottom: 0;
+        left: 0;
+        box-shadow: 0 -2px 5px rgba(0,0,0,0.2);
+        max-height: 50%;
+        transform: translateY(100%);
+      }
+
+      .cart.show {
+        transform: translateY(0);
+      }
+
+      .cart-toggle {
+        display: block;
+      }
+
+      .product button {
+        font-size: 14px;
+        padding: 8px;
+      }
+
+      .order-btn {
+        font-size: 14px;
+        padding: 10px;
+      }
+    }
+
+    @media (max-width: 480px) {
+      header h1 {
+        font-size: 20px;
+      }
+
+      header p {
+        font-size: 14px;
+      }
+
+      .product h3 {
+        font-size: 16px;
+      }
+
+      .product p {
+        font-size: 12px;
+      }
+
+      .cart {
+        max-height: 60%;
+        padding: 15px;
+      }
     }
   </style>
 </head>
@@ -128,6 +227,9 @@
     <a id="orderLink" class="order-btn" target="_blank">Send Order via WhatsApp</a>
   </div>
 
+  <!-- Cart Toggle Button for Mobile -->
+  <button class="cart-toggle" onclick="toggleCart()">🛒</button>
+
   <script>
     let cart = [];
 
@@ -158,11 +260,17 @@
       });
       message += `%0ATotal: $${total}`;
 
-      document.getElementById("orderLink").href = `https://wa.me/${201026178272}?text=${message}`;
+      document.getElementById("orderLink").href = `https://wa.me/${phoneNumber}?text=${message}`;
     }
 
     // Update link live when typing name
     document.getElementById("customerName").addEventListener("input", renderCart);
+
+    // Toggle cart on mobile
+    function toggleCart() {
+      const cart = document.querySelector('.cart');
+      cart.classList.toggle('show');
+    }
   </script>
 
 </body>
