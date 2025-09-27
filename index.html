@@ -94,7 +94,7 @@ const products = [
   // Skin Care
   { name: "Marie’s retinol night cream", price: 450, category: "skin_care", img: "https://i.postimg.cc/8CbVzHf4/40a3ebdc-e8ee-4478-b2e8-db813f0109c5.jpg", description: "كريم الليل بالرتينول ضد التجاعيد" },
   { name: "Marie’s day cream", price: 350, category: "skin_care", img: "https://i.postimg.cc/P5x6wQ7b/image.jpg", description: "كريم مرطب للنهار" },
-  { name: "Marie’s alpha arbutin serum", price: 375, category: "skin_care", img: "https://i.postimg.cc/HsvNGrK3/serum.jpg", description: "سيرم التفتيح بالهيالورنيك اسيد والالفا اربيوتين" },
+  { name: "Marie’s alpha arbutin serum 30ml", price: 375, category: "skin_care", img: "https://i.postimg.cc/HsvNGrK3/serum.jpg", description: "سيرم التفتيح بالهيالورنيك اسيد والالفا اربيوتين" },
   { name: "Marie’s niacinamide serum 30 ml", price: 375, category: "skin_care", img: "https://i.postimg.cc/NfJQN7cM/serum2.jpg", description: "سيرم بالهيالورنيك اسيد والنباسيناميد لتوحيد لون البشرة وتنظيم الدهون في البشرة " },
   { name: "Marie’s face wash for normal & dry skin ", price: 250, category: "skin_care", img: "https://i.postimg.cc/qqXKd6jN/43690b91-b831-4d02-be82-2360757984e0.jpg", description: "غسول مرطب وملطف للبشرة العادية والجافة" },
 
@@ -102,7 +102,7 @@ const products = [
 
   // Body Care
   
-  { name: "Marie’s scented dry oil", price: 500, category: "body_care", img: "https://i.postimg.cc/5ydzTWWp/oil.jpg", description: "الزيت الجاف المرطب" },
+  { name: "Marie’s scented dry oil 50ml", price: 500, category: "body_care", img: "https://i.postimg.cc/5ydzTWWp/oil.jpg", description: "الزيت الجاف المرطب" },
    { name: "Marie’s scented body lotion 250 ml", price: 350, category: "body_care", img: "https://i.postimg.cc/90rk8TVP/lotion.jpg", description: "لوشن مرطب للجسم " },
 ];
 
@@ -118,7 +118,7 @@ function renderProducts() {
     div.innerHTML = `
       <img src="${product.img}" alt="${product.name}">
       <h3>${product.name}</h3>
-      <p>${product.description}</p>
+      <h4>${product.description}</h4>
       <p><strong>${product.price} LE</strong></p>
       <button onclick="addToCart('${product.name}', ${product.price})">Add to Cart</button>
     `;
