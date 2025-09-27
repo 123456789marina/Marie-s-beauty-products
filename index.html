@@ -19,18 +19,31 @@
       text-align: center;
     }
 
-    /* Flex layout for desktop */
     .main-content {
       display: flex;
       gap: 20px;
       padding: 20px;
+      flex-wrap: wrap;
+    }
+
+    .category {
+      flex: 1;
+      min-width: 250px;
+    }
+
+    .category h2 {
+      background: #ff4081;
+      color: white;
+      padding: 10px;
+      border-radius: 8px;
+      margin-bottom: 10px;
+      text-align: center;
     }
 
     .container {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
       gap: 20px;
-      flex: 1;
     }
 
     .product {
@@ -95,7 +108,6 @@
       font-size: 16px;
     }
 
-    /* Cart toggle button for mobile */
     .cart-toggle {
       display: none;
       position: fixed;
@@ -111,7 +123,6 @@
       z-index: 1100;
     }
 
-    /* MOBILE / TABLET */
     @media (max-width: 1024px) {
       .main-content { flex-direction: column; padding: 15px; }
       .cart { width: 100%; max-height: 50%; position: fixed; bottom: 0; left: 0; box-shadow: 0 -2px 5px rgba(0,0,0,0.2); transform: translateY(100%); }
@@ -133,46 +144,83 @@
 <body>
 
   <header>
-    <h1>Maries' Products</h1>
-    <p>Perfumes & Sunblocks</p>
+    <h1> Marie’s Beauty Products</h1>
+    <p>For skin care, hair care and perfumes</p>
   </header>
 
   <div class="main-content">
-    <div class="container">
-      <div class="product">
-        <img src="https://i.postimg.cc/gj00qqJS/perfume.jpg" alt="Rose Perfume">
-        <h3>Rose Perfume</h3>
-        <p>Elegant floral fragrance.</p>
-        <p><strong>$25</strong></p>
-        <button onclick="addToCart('Rose Perfume', 25)">Add to Cart</button>
+    <!-- Perfumes Category -->
+    <div class="category">
+      <h2>Perfumes</h2>
+      <div class="container" id="perfumes-container">
+        <!-- Perfume products will go here -->
+         <div class="product">
+        <img src=" https://i.postimg.cc/qv9NnMYr/1d7b4e95-b7e8-4719-8d4d-6965032d9e47.jpg" alt="Rose Perfume">
+        <h3>Marie’s kayali sparkling bouquet eau de toilette</h3>
+        <p>50 ml</p>
+        <p><strong>400 LE</strong></p>
+        <button onclick="addToCart('Marie’s kayali sparkling bouquet eau de toilette', 400)">Add to Cart</button>
       </div>
+
       <div class="product">
-        <img src="https://i.postimg.cc/4dYfY4SJ/4b3f0438-455e-4252-b3dd-ad3a4febd494.jpg" alt="Vanilla Perfume">
-        <h3>Vanilla Perfume</h3>
-        <p>Sweet and long-lasting.</p>
-        <p><strong>$30</strong></p>
-        <button onclick="addToCart('Vanilla Perfume', 30)">Add to Cart</button>
+        <img src=" https://i.postimg.cc/K8rYKrns/c1b8e16b-b38d-4d6d-815d-66eb324624c2.jpg" alt="Rose Perfume">
+        <h3> Marie’s La belle eau de toilette </h3>
+        <p>50 ml</p>
+        <p><strong>400 LE</strong></p>
+        <button onclick="addToCart('Marie’s La belle eau de toilette', 400)">Add to Cart</button>
       </div>
+
+      </div>
+    </div>
+
+    <!-- Lip balm Category -->
+    <div class="category">
+      <h2>Lip balms</h2>
+      <div class="container" id="lip balms-container">
+        <!-- lip balms products will go here -->
+
+        <div class="product">
+        <img src=" https://i.postimg.cc/zGcz1pWp/1b6b949e-5359-4ea9-9d3c-81060d303b13.jpg" alt="Rose Perfume">
+        <h3>  Marie’s lip balm  </h3>
+        <h4>مرطب الشفاه 
+باللون الوردي وطعم الكريز </h4>
+        <p><strong>120 LE</strong></p>
+        <button onclick="addToCart('Marie’s lip balm ', 120)">Add to Cart</button>
+      </div>
+
+<div class="product">
+        <img src=" https://i.postimg.cc/P524fvrz/85ad8d63-8b66-45aa-b646-0cf28e369a31.jpg" alt="Rose Perfume">
+        <h3>   Marie’s neutral lip balm  </h3>
+        <h4> مرطب الشفاه بدون لون وطعم الفانيلا </h4>
+        <p><strong>120 LE</strong></p>
+        <button onclick="addToCart('Marie’s neutral lip balm ', 120)">Add to Cart</button>
+      </div>
+
+      </div>
+    </div>
+
+    <!-- creams -->
+    <div class="category">
+      <h2>Creams</h2>
+      <div class="container" id="creams-container">
+        <!-- creams products will go here -->
+
+        <div class="product">
+        <img src=" https://i.postimg.cc/8CbVzHf4/40a3ebdc-e8ee-4478-b2e8-db813f0109c5.jpg" alt="Rose Perfume">
+        <h3>    Marie’s retinol night cream  </h3>
+        <h4> كريم الليل بالرتينول ضد التجاعيد</h4>
+        <p><strong>450 LE</strong></p>
+        <button onclick="addToCart('  Marie’s retinol night cream ', 450)">Add to Cart</button>
+      </div>
+
        <div class="product">
-        <img src=" https://i.postimg.cc/cHwz9VKS/799263c1-4dc5-4689-be7f-522cbb1f7b7a.jpg " alt="Vanilla Perfume">
-        <h3>Vanilla Perfume</h3>
-        <p>Sweet and long-lasting.</p>
-        <p><strong>$30</strong></p>
-        <button onclick="addToCart('Vanilla Perfume', 30)">Add to Cart</button>
+        <img src=" https://i.postimg.cc/P5x6wQ7b/image.jpg" alt="Rose Perfume">
+        <h3>    Marie’s day cream  </h3>
+        <h4> كريم مرطب للنهار</h4>
+        <p><strong>350 LE</strong></p>
+        <button onclick="addToCart(' Marie’s day cream  ', 350)">Add to Cart</button>
       </div>
-      <div class="product">
-        <img src=" https://i.postimg.cc/3xyQjfZm/964dc663-4f03-45f3-9cb1-065f34fca3d6.jpg" alt="Vanilla Perfume">
-        <h3>Vanilla Perfume</h3>
-        <p>Sweet and long-lasting.</p>
-        <p><strong>$30</strong></p>
-        <button onclick="addToCart('Vanilla Perfume', 30)">Add to Cart</button>
-      </div>
-      <div class="product">
-        <img src=" https://i.postimg.cc/z3ZKdcgZ/fe140f84-b05c-48c8-9a3a-7e47350d87c5.jpg" alt="Sunblock SPF 50">
-        <h3>Sunblock SPF 50</h3>
-        <p>Protects against UV rays.</p>
-        <p><strong>$18</strong></p>
-        <button onclick="addToCart('Sunblock SPF 50', 18)">Add to Cart</button>
+
       </div>
     </div>
 
@@ -181,16 +229,39 @@
       <label for="customerName">Your Name:</label>
       <input type="text" id="customerName" placeholder="Enter your name" style="width:100%;padding:8px;margin:8px 0;">
       <ul id="cart-items"></ul>
-      <p><strong>Total: $<span id="total">0</span></strong></p>
+      <p><strong>Total: LE<span id="total">0</span></strong></p>
       <a id="orderLink" class="order-btn" target="_blank">Send Order via WhatsApp</a>
     </div>
   </div>
 
-  <!-- Cart Toggle Button for Mobile -->
   <button class="cart-toggle" onclick="toggleCart()">🛒</button>
 
   <script>
-    let cart = [];
+   
+    function renderProducts() {
+      const perfumeContainer = document.getElementById("perfumes-container");
+      const sunblockContainer = document.getElementById("sunblocks-container");
+      const othersContainer = document.getElementById("others-container");
+
+      products.forEach(product => {
+        const productDiv = document.createElement("div");
+        productDiv.className = "product";
+        productDiv.innerHTML = `
+          <img src="${product.img}" alt="${product.name}">
+          <h3>${product.name}</h3>
+          <p>${product.description}</p>
+          <p><strong>$${product.price}</strong></p>
+          <button onclick="addToCart('${product.name}', ${product.price})">Add to Cart</button>
+        `;
+        if(product.category === "Perfumes") {
+          perfumeContainer.appendChild(productDiv);
+        } else if(product.category === "Sunblocks") {
+          sunblockContainer.appendChild(productDiv);
+        } else {
+          othersContainer.appendChild(productDiv);
+        }
+      });
+    }
 
     function addToCart(name, price) {
       cart.push({ name, price });
@@ -226,6 +297,8 @@
     function toggleCart() {
       document.querySelector('.cart').classList.toggle('show');
     }
+
+    renderProducts();
   </script>
 
 </body>
