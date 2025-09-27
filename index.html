@@ -1,4 +1,4 @@
-   <!DOCTYPE html>
+  <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
@@ -19,11 +19,18 @@
       text-align: center;
     }
 
+    /* Flex layout for desktop */
+    .main-content {
+      display: flex;
+      gap: 20px;
+      padding: 20px;
+    }
+
     .container {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
       gap: 20px;
-      padding: 20px;
+      flex: 1;
     }
 
     .product {
@@ -61,32 +68,19 @@
     }
 
     .cart {
-      position: fixed;
-      top: 0;
-      right: 0;
       width: 300px;
-      height: 100%;
       background: white;
       box-shadow: -2px 0 5px rgba(0,0,0,0.2);
       padding: 20px;
       overflow-y: auto;
+      flex-shrink: 0;
       transition: all 0.3s ease;
-      z-index: 1000;
     }
 
-    .cart h2 {
-      margin-top: 0;
-    }
+    .cart h2 { margin-top: 0; }
 
-    .cart ul {
-      list-style: none;
-      padding: 0;
-    }
-
-    .cart ul li {
-      margin: 10px 0;
-      font-size: 14px;
-    }
+    .cart ul { list-style: none; padding: 0; }
+    .cart ul li { margin: 10px 0; font-size: 14px; }
 
     .order-btn {
       margin-top: 15px;
@@ -117,70 +111,22 @@
       z-index: 1100;
     }
 
-    /* RESPONSIVE STYLES */
+    /* MOBILE / TABLET */
     @media (max-width: 1024px) {
-      .cart {
-        width: 250px;
-      }
-    }
-
-    @media (max-width: 768px) {
-      .container {
-        padding: 15px;
-        gap: 15px;
-      }
-
-      .cart {
-        width: 100%;
-        height: auto;
-        position: fixed;
-        bottom: 0;
-        left: 0;
-        box-shadow: 0 -2px 5px rgba(0,0,0,0.2);
-        max-height: 50%;
-        transform: translateY(100%);
-      }
-
-      .cart.show {
-        transform: translateY(0);
-      }
-
-      .cart-toggle {
-        display: block;
-      }
-
-      .product button {
-        font-size: 14px;
-        padding: 8px;
-      }
-
-      .order-btn {
-        font-size: 14px;
-        padding: 10px;
-      }
+      .main-content { flex-direction: column; padding: 15px; }
+      .cart { width: 100%; max-height: 50%; position: fixed; bottom: 0; left: 0; box-shadow: 0 -2px 5px rgba(0,0,0,0.2); transform: translateY(100%); }
+      .cart.show { transform: translateY(0); }
+      .cart-toggle { display: block; }
+      .product button { font-size: 14px; padding: 8px; }
+      .order-btn { font-size: 14px; padding: 10px; }
     }
 
     @media (max-width: 480px) {
-      header h1 {
-        font-size: 20px;
-      }
-
-      header p {
-        font-size: 14px;
-      }
-
-      .product h3 {
-        font-size: 16px;
-      }
-
-      .product p {
-        font-size: 12px;
-      }
-
-      .cart {
-        max-height: 60%;
-        padding: 15px;
-      }
+      header h1 { font-size: 20px; }
+      header p { font-size: 14px; }
+      .product h3 { font-size: 16px; }
+      .product p { font-size: 12px; }
+      .cart { max-height: 60%; padding: 15px; }
     }
   </style>
 </head>
@@ -191,40 +137,53 @@
     <p>Perfumes & Sunblocks</p>
   </header>
 
-  <div class="container">
-    <div class="product">
-      <img src=" https://web.whatsapp.com/" alt="Perfume">
-      <h3>Rose Perfume</h3>
-      <p>Elegant floral fragrance.</p>
-      <p><strong>$25</strong></p>
-      <button onclick="addToCart('Rose Perfume', 25)">Add to Cart</button>
+  <div class="main-content">
+    <div class="container">
+      <div class="product">
+        <img src="https://i.postimg.cc/gj00qqJS/perfume.jpg" alt="Rose Perfume">
+        <h3>Rose Perfume</h3>
+        <p>Elegant floral fragrance.</p>
+        <p><strong>$25</strong></p>
+        <button onclick="addToCart('Rose Perfume', 25)">Add to Cart</button>
+      </div>
+      <div class="product">
+        <img src="https://i.postimg.cc/4dYfY4SJ/4b3f0438-455e-4252-b3dd-ad3a4febd494.jpg" alt="Vanilla Perfume">
+        <h3>Vanilla Perfume</h3>
+        <p>Sweet and long-lasting.</p>
+        <p><strong>$30</strong></p>
+        <button onclick="addToCart('Vanilla Perfume', 30)">Add to Cart</button>
+      </div>
+       <div class="product">
+        <img src=" https://i.postimg.cc/cHwz9VKS/799263c1-4dc5-4689-be7f-522cbb1f7b7a.jpg " alt="Vanilla Perfume">
+        <h3>Vanilla Perfume</h3>
+        <p>Sweet and long-lasting.</p>
+        <p><strong>$30</strong></p>
+        <button onclick="addToCart('Vanilla Perfume', 30)">Add to Cart</button>
+      </div>
+      <div class="product">
+        <img src=" https://i.postimg.cc/3xyQjfZm/964dc663-4f03-45f3-9cb1-065f34fca3d6.jpg" alt="Vanilla Perfume">
+        <h3>Vanilla Perfume</h3>
+        <p>Sweet and long-lasting.</p>
+        <p><strong>$30</strong></p>
+        <button onclick="addToCart('Vanilla Perfume', 30)">Add to Cart</button>
+      </div>
+      <div class="product">
+        <img src=" https://i.postimg.cc/z3ZKdcgZ/fe140f84-b05c-48c8-9a3a-7e47350d87c5.jpg" alt="Sunblock SPF 50">
+        <h3>Sunblock SPF 50</h3>
+        <p>Protects against UV rays.</p>
+        <p><strong>$18</strong></p>
+        <button onclick="addToCart('Sunblock SPF 50', 18)">Add to Cart</button>
+      </div>
     </div>
-    <div class="product">
-      <img src="https://via.placeholder.com/250x200?text=Perfume+2" alt="Perfume">
-      <h3>Vanilla Perfume</h3>
-      <p>Sweet and long-lasting.</p>
-      <p><strong>$30</strong></p>
-      <button onclick="addToCart('Vanilla Perfume', 30)">Add to Cart</button>
+
+    <div class="cart">
+      <h2>Cart</h2>
+      <label for="customerName">Your Name:</label>
+      <input type="text" id="customerName" placeholder="Enter your name" style="width:100%;padding:8px;margin:8px 0;">
+      <ul id="cart-items"></ul>
+      <p><strong>Total: $<span id="total">0</span></strong></p>
+      <a id="orderLink" class="order-btn" target="_blank">Send Order via WhatsApp</a>
     </div>
-    <div class="product">
-      <img src="https://via.placeholder.com/250x200?text=Sunblock+1" alt="Sunblock">
-      <h3>Sunblock SPF 50</h3>
-      <p>Protects against UV rays.</p>
-      <p><strong>$18</strong></p>
-      <button onclick="addToCart('Sunblock SPF 50', 18)">Add to Cart</button>
-    </div>
-  </div>
-
-  <div class="cart">
-    <h2>Cart</h2>
-
-    <!-- Customer Name Input -->
-    <label for="customerName">Your Name:</label>
-    <input type="text" id="customerName" placeholder="Enter your name" style="width:100%;padding:8px;margin:8px 0;">
-
-    <ul id="cart-items"></ul>
-    <p><strong>Total: $<span id="total">0</span></strong></p>
-    <a id="orderLink" class="order-btn" target="_blank">Send Order via WhatsApp</a>
   </div>
 
   <!-- Cart Toggle Button for Mobile -->
@@ -250,8 +209,7 @@
       });
       document.getElementById("total").textContent = total;
 
-      // WhatsApp link (replace with Marie's number)
-      let phoneNumber = "201026178272"; // Replace with Marie's WhatsApp number
+      let phoneNumber = "201026178272"; // Marie's WhatsApp number
       let customerName = document.getElementById("customerName").value || "Customer";
 
       let message = `Hello Marie,%0AMy name is ${customerName}.%0AI would like to order:%0A`;
@@ -260,16 +218,13 @@
       });
       message += `%0ATotal: $${total}`;
 
-      document.getElementById("orderLink").href = `https://wa.me/${201026178272}?text=${message}`;
+      document.getElementById("orderLink").href = `https://wa.me/${phoneNumber}?text=${message}`;
     }
 
-    // Update link live when typing name
     document.getElementById("customerName").addEventListener("input", renderCart);
 
-    // Toggle cart on mobile
     function toggleCart() {
-      const cart = document.querySelector('.cart');
-      cart.classList.toggle('show');
+      document.querySelector('.cart').classList.toggle('show');
     }
   </script>
 
