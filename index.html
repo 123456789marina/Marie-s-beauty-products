@@ -49,7 +49,6 @@
     background: transparent;
   }
 
-  /* Center category titles horizontally & vertically */
   .category h2 {
     margin: 0 0 12px 0;
     background: var(--pink-400);
@@ -59,14 +58,27 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    height: 52px;            /* makes vertical centering consistent */
+    height: 52px;
     font-size: 18px;
     text-align: center;
     box-shadow: 0 2px 6px rgba(0,0,0,0.06);
+    cursor: pointer;
+    position: relative;
+  }
+
+  .category h2::after {
+    content: "＋";
+    position: absolute;
+    right: 12px;
+    font-weight: bold;
+  }
+
+  .category.open h2::after {
+    content: "−";
   }
 
   .container {
-    display: grid;
+    display: none;
     grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
     gap: 12px;
   }
@@ -124,7 +136,6 @@
   }
   .product button:hover { transform: translateY(-1px); }
 
-  /* Cart */
   .cart {
     position: fixed;
     right: -360px;
@@ -186,7 +197,6 @@
     font-weight:700;
   }
 
-  /* cart toggle button */
   .cart-toggle {
     position: fixed;
     bottom: 20px;
@@ -202,7 +212,6 @@
     z-index: 1250;
   }
 
-  /* Responsive adjustments */
   @media (max-width: 1100px) {
     .main-content { padding: 14px; }
     .category { max-width: none; flex-basis: 100%; }
@@ -253,34 +262,20 @@
 
 <div class="cart" id="cart">
   <h2>Cart</h2>
-
   <label for="customerName">Your Name:</label>
   <input type="text" id="customerName" placeholder="Enter your name">
-
   <label for="customerPhone">Your Phone Number:</label>
   <input type="text" id="customerPhone" placeholder="Enter your phone number">
-
   <ul id="cart-items"></ul>
-
   <p class="total-row">Total: LE <span id="total">0</span></p>
-
   <a id="orderLink" class="order-btn" target="_blank" rel="noopener">Send Order via WhatsApp</a>
 </div>
 
 <button class="cart-toggle" id="cartToggleBtn" aria-label="Open cart">🛒</button>
 
 <script>
-/* -------------------------
-   Products array (full list)
-   Keys for categories:
-   - Perfumes
-   - lips_care
-   - skin_care
-   - body_care
-   - hair_care
-   - sunscreens_care
-   ------------------------- */
-const products = [
+/* ✅ PART 2 WILL START WITH: const products = [...] */
+ const products = [
   // Perfumes
   { name: "Marie’s kayali sparkling bouquet", price: 400, category: "Perfumes",
     img: "https://i.postimg.cc/qv9NnMYr/1d7b4e95-b7e8-4719-8d4d-6965032d9e47.jpg",
@@ -288,6 +283,9 @@ const products = [
   { name: "Marie’s La belle eau de toilette", price: 400, category: "Perfumes",
     img: "https://i.postimg.cc/K8rYKrns/c1b8e16b-b38d-4d6d-815d-66eb324624c2.jpg",
     description: "50 ml" },
+  { name: "Marie’s Body Splash 120ml", price: 300, category: "Perfumes",
+    img: "https://i.postimg.cc/TYCvwbJX/body-care.jpg",
+    description: "سبراي منعش مرطب للجسم بروائح متعددة" },
 
   // Lips Care
   { name: "Marie’s lip balm (Pink)", price: 120, category: "lips_care",
@@ -321,15 +319,11 @@ const products = [
   { name: "Marie’s scented body lotion 250 ml", price: 350, category: "body_care",
     img: "https://i.postimg.cc/90rk8TVP/lotion.jpg",
     description: "لوشن مرطب للجسم" },
-  { name: "Marie’s Body Splash 120ml", price: 300, category: "body_care",
-    img: "https://i.postimg.cc/TYCvwbJX/body-care.jpg",
-    description: "سبراي منعش مرطب للجسم بروائح متعددة" },
 
   // Hair Care
-  { name: "Marie’s Hyaluronic Acid shampoo 250ml", price: 400, category: "hair_care",
-    img: "https://i.postimg.cc/0j7mnxZG/cc46b901-3dfa-4984-9371-13c5d61c40b7.jpg",
+   { name: "Marie’s Hyaluronic Acid shampoo 250ml", price: 400, category: "hair_care",
+    img: "https://i.postimg.cc/8CvCb0K0/cc46b901-3dfa-4984-9371-13c5d61c40b7.jpg",
     description: "شامبو مرطب ومغذي للشعر" },
-
   // Sunscreens (example realistic-style images)
   { name: "Marie’s SPF50 Sun Gel 100ml", price: 350, category: "sunscreens_care",
     img: "https://i.postimg.cc/3JmQMt2d/sunscreen.jpg",
@@ -341,7 +335,7 @@ const products = [
 
 let cart = [];
 
-/* Render products into their category containers */
+/* Renders products */
 function renderProducts() {
   const sections = {
     Perfumes: document.getElementById("perfumes-container"),
@@ -352,8 +346,7 @@ function renderProducts() {
     sunscreens_care: document.getElementById("sunscreens_care-container")
   };
 
-  // clear containers (in case of re-render)
-  Object.values(sections).forEach(sec => { if (sec) sec.innerHTML = ""; });
+  Object.values(sections).forEach(sec => sec.innerHTML = "");
 
   products.forEach((product, idx) => {
     const div = document.createElement("div");
@@ -366,12 +359,9 @@ function renderProducts() {
       <button data-idx="${idx}">Add to Cart</button>
     `;
     const container = sections[product.category];
-    if (container) {
-      container.appendChild(div);
-    }
+    if (container) container.appendChild(div);
   });
 
-  // attach click listeners for all add buttons
   document.querySelectorAll('.product button').forEach(btn => {
     btn.addEventListener('click', () => {
       const index = Number(btn.dataset.idx);
@@ -380,78 +370,75 @@ function renderProducts() {
   });
 }
 
-/* Add product to cart by index (safer for product names with apostrophes) */
+/* ✅ Allow only 1 category open at a time */
+function enableCategoryToggle() {
+  const categories = document.querySelectorAll('.category');
+  categories.forEach(category => {
+    const title = category.querySelector('h2');
+    const container = category.querySelector('.container');
+    title.addEventListener('click', () => {
+      categories.forEach(c => {
+        if (c !== category) {
+          c.classList.remove('open');
+          c.querySelector('.container').style.display = 'none';
+        }
+      });
+      const isOpen = category.classList.toggle('open');
+      container.style.display = isOpen ? 'grid' : 'none';
+    });
+  });
+}
+
+/* Cart logic */
 function addToCartByIndex(index) {
-  const p = products[index];
-  if (!p) return;
-  // allow duplicates (simple cart) — could be extended to quantities
-  cart.push({ name: p.name, price: p.price });
+  cart.push(products[index]);
   renderCart();
 }
 
-/* Remove item by cart index */
-function removeFromCart(cartIndex) {
-  cart.splice(cartIndex, 1);
-  renderCart();
-}
-
-/* Render cart and update WhatsApp link */
 function renderCart() {
-  const cartList = document.getElementById("cart-items");
-  cartList.innerHTML = "";
+  const list = document.getElementById("cart-items");
+  const totalEl = document.getElementById("total");
+  const orderLink = document.getElementById("orderLink");
+
+  list.innerHTML = "";
+
   let total = 0;
-
   cart.forEach((item, i) => {
+    total += item.price;
     const li = document.createElement("li");
-    const nameSpan = document.createElement("span");
-    nameSpan.textContent = `${item.name} - ${item.price} LE`;
-    const removeBtn = document.createElement("button");
-    removeBtn.className = "remove-btn";
-    removeBtn.textContent = "Remove";
-    removeBtn.addEventListener("click", () => removeFromCart(i));
-    li.appendChild(nameSpan);
-    li.appendChild(removeBtn);
-    cartList.appendChild(li);
-    total += Number(item.price);
+    li.innerHTML = `${item.name} - LE ${item.price} <button class="remove-btn" data-i="${i}">✖</button>`;
+    list.appendChild(li);
   });
 
-  document.getElementById("total").textContent = total;
+  totalEl.textContent = total;
 
-  const customerName = document.getElementById("customerName").value.trim() || "Customer";
-  const customerPhone = document.getElementById("customerPhone").value.trim() || "No phone provided";
+  const name = document.getElementById("customerName").value || "Customer";
+  const phone = document.getElementById("customerPhone").value || "No phone";
 
-  let message = `Hello Marie,\nMy name is ${customerName}.\nMy phone number is ${customerPhone}.\nI would like to order:\n`;
-  cart.forEach(i => {
-    message += `- ${i.name} (${i.price} LE)\n`;
+  const message = encodeURIComponent(
+    `Order from ${name} (${phone}):\n` +
+    cart.map(item => `- ${item.name} (${item.price} LE)`).join("\n") +
+    `\nTotal: ${total} LE`
+  );
+
+  orderLink.href = `https://wa.me/201234567890?text=${message}`;
+
+  document.querySelectorAll(".remove-btn").forEach(btn => {
+    btn.addEventListener("click", () => {
+      const idx = Number(btn.dataset.i);
+      cart.splice(idx, 1);
+      renderCart();
+    });
   });
-  message += `Total: ${total} LE`;
-
-  const waNumber = "201026178272";
-  const encoded = encodeURIComponent(message);
-  document.getElementById("orderLink").href = `https://wa.me/${waNumber}?text=${encoded}`;
 }
 
-/* Input listeners to update message dynamically */
-document.getElementById("customerName").addEventListener("input", renderCart);
-document.getElementById("customerPhone").addEventListener("input", renderCart);
-
-/* cart toggle button */
-const cartToggleBtn = document.getElementById("cartToggleBtn");
-const cartPanel = document.getElementById("cart");
-cartToggleBtn.addEventListener("click", () => {
-  cartPanel.classList.toggle("show");
+/* Cart toggle button */
+document.getElementById("cartToggleBtn").addEventListener("click", () => {
+  document.getElementById("cart").classList.toggle("show");
 });
 
-/* close cart if clicked outside on wide screens (nice UX) */
-document.addEventListener("click", (e) => {
-  const isClickInside = cartPanel.contains(e.target) || cartToggleBtn.contains(e.target);
-  if (!isClickInside && window.innerWidth > 1100) {
-    cartPanel.classList.remove("show");
-  }
-});
-
-/* initial render */
 renderProducts();
+enableCategoryToggle();
 renderCart();
 </script>
 
