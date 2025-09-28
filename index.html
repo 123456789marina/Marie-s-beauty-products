@@ -5,38 +5,111 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Marie’s Beauty Products</title>
 <style>
-body { font-family: Arial, sans-serif; margin:0; padding:0; background:#f8f8f8; }
-header { background:#ff4081; color:white; padding:15px; text-align:center; }
-.main-content { display:flex; gap:20px; padding:20px; flex-wrap:wrap; }
-.category { flex:1; min-width:250px; }
-.category h2 { background:#ff4081; color:white; padding:10px; border-radius:8px; margin-bottom:10px; text-align:center; }
-.container { display:grid; grid-template-columns:repeat(auto-fit, minmax(250px,1fr)); gap:20px; }
-.product { background:white; padding:15px; border-radius:10px; box-shadow:0 2px 5px rgba(0,0,0,0.1); text-align:center; }
-.product img { width:100%; border-radius:8px; height:200px; object-fit:cover; }
-.product h3 { margin:10px 0; }
-.product p { font-size:14px; color:#555; }
-.product button { margin-top:10px; padding:10px; border:none; background:#ff4081; color:white; border-radius:5px; cursor:pointer; width:100%; font-size:16px; }
-.cart { width:300px; background:white; box-shadow:-2px 0 5px rgba(0,0,0,0.2); padding:20px; overflow-y:auto; flex-shrink:0; transition:all 0.3s ease; }
-.cart h2 { margin-top:0; }
-.cart ul { list-style:none; padding:0; }
-.cart ul li { margin:10px 0; font-size:14px; }
-.order-btn { margin-top:15px; display:block; text-align:center; padding:12px; background:#25d366; color:white; text-decoration:none; border-radius:8px; font-weight:bold; font-size:16px; }
-.cart-toggle { display:none; position:fixed; bottom:10px; right:10px; background:#ff4081; color:white; border:none; padding:12px; border-radius:50%; font-size:18px; cursor:pointer; z-index:1100; }
-@media(max-width:1024px){
-  .main-content{ flex-direction:column; padding:15px; }
-  .cart{ width:100%; max-height:50%; position:fixed; bottom:0; left:0; box-shadow:0 -2px 5px rgba(0,0,0,0.2); transform:translateY(100%); }
-  .cart.show{ transform:translateY(0); }
-  .cart-toggle{ display:block; }
-  .product button{ font-size:14px; padding:8px; }
-  .order-btn{ font-size:14px; padding:10px; }
+  body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    background: #fff7fb;
+    color: #333;
+  }
+
+  header {
+    text-align: center;
+    padding: 20px;
+    background: #ffb6d9;
+    color: white;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+  }
+
+  .main-content {
+    display: flex;
+    flex-wrap: wrap;
+    padding: 20px;
+  }
+
+  .category {
+    flex: 1;
+    min-width: 300px;
+    margin: 10px;
+  }
+
+   .category h2 {
+  background: #ff79b0;
+  color: white;
+  padding: 10px;
+  border-radius: 8px;
+  text-align: center; /* ✅ Centers the text */
 }
-@media(max-width:480px){
-  header h1{ font-size:20px; }
-  header p{ font-size:14px; }
-  .product h3{ font-size:16px; }
-  .product p{ font-size:12px; }
-  .cart{ max-height:60%; padding:15px; }
-}
+
+
+  .container {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+    gap: 10px;
+  }
+
+  .product {
+    background: white;
+    border-radius: 10px;
+    padding: 10px;
+    text-align: center;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+  }
+
+  .product img {
+    width: 100%;
+    border-radius: 10px;
+  }
+
+  .product button {
+    background: #ff79b0;
+    color: white;
+    border: none;
+    padding: 8px 12px;
+    border-radius: 6px;
+    cursor: pointer;
+  }
+
+  .cart {
+    position: fixed;
+    right: -350px;
+    top: 0;
+    width: 300px;
+    height: 100%;
+    background: white;
+    box-shadow: -2px 0 5px rgba(0,0,0,0.1);
+    padding: 20px;
+    transition: right 0.3s ease;
+    overflow-y: auto;
+  }
+
+  .cart.show {
+    right: 0;
+  }
+
+  .cart-toggle {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    background: #ff79b0;
+    color: white;
+    padding: 15px;
+    border-radius: 50%;
+    border: none;
+    cursor: pointer;
+    font-size: 20px;
+  }
+
+  .order-btn {
+    background: #25d366;
+    color: white;
+    display: block;
+    text-align: center;
+    padding: 10px;
+    margin-top: 10px;
+    border-radius: 8px;
+    text-decoration: none;
+  }
+
 </style>
 </head>
 <body>
@@ -67,10 +140,24 @@ header { background:#ff4081; color:white; padding:15px; text-align:center; }
     <div class="container" id="body_care-container"></div>
   </div>
 
+  <div class="category">
+    <h2>Hair Care</h2>
+    <div class="container" id="hair_care-container"></div>
+  </div>
+
+  <div class="category">
+    <h2>Sunscreens</h2>
+    <div class="container" id="sunscreens_care-container"></div>
+  </div>
+
   <div class="cart">
     <h2>Cart</h2>
     <label for="customerName">Your Name:</label>
-    <input type="text" id="customerName" placeholder="Enter your name" style="width:100%;padding:8px;margin:8px 0;">
+    <input type="text" id="customerName" placeholder="Enter your name">
+
+    <label for="customerPhone">Your Phone Number:</label>
+    <input type="text" id="customerPhone" placeholder="Enter your phone number">
+
     <ul id="cart-items"></ul>
     <p><strong>Total: LE<span id="total">0</span></strong></p>
     <a id="orderLink" class="order-btn" target="_blank">Send Order via WhatsApp</a>
@@ -83,34 +170,26 @@ header { background:#ff4081; color:white; padding:15px; text-align:center; }
 let cart = [];
 
 const products = [
-  // Perfumes
   { name: "Marie’s kayali sparkling bouquet", price: 400, category: "Perfumes", img: "https://i.postimg.cc/qv9NnMYr/1d7b4e95-b7e8-4719-8d4d-6965032d9e47.jpg", description: "50 ml" },
   { name: "Marie’s La belle eau de toilette", price: 400, category: "Perfumes", img: "https://i.postimg.cc/K8rYKrns/c1b8e16b-b38d-4d6d-815d-66eb324624c2.jpg", description: "50 ml" },
-
-  // Lips Care
   { name: "Marie’s lip balm", price: 120, category: "lips_care", img: "https://i.postimg.cc/zGcz1pWp/1b6b949e-5359-4ea9-9d3c-81060d303b13.jpg", description: "مرطب الشفاه باللون الوردي وطعم الكريز" },
   { name: "Marie’s neutral lip balm", price: 120, category: "lips_care", img: "https://i.postimg.cc/P524fvrz/85ad8d63-8b66-45aa-b646-0cf28e369a31.jpg", description: "مرطب الشفاه بدون لون وطعم الفانيلا" },
-
-  // Skin Care
   { name: "Marie’s retinol night cream", price: 450, category: "skin_care", img: "https://i.postimg.cc/8CbVzHf4/40a3ebdc-e8ee-4478-b2e8-db813f0109c5.jpg", description: "كريم الليل بالرتينول ضد التجاعيد" },
   { name: "Marie’s day cream", price: 350, category: "skin_care", img: "https://i.postimg.cc/P5x6wQ7b/image.jpg", description: "كريم مرطب للنهار" },
-  { name: "Marie’s alpha arbutin serum 30ml", price: 375, category: "skin_care", img: "https://i.postimg.cc/HsvNGrK3/serum.jpg", description: "سيرم التفتيح بالهيالورنيك اسيد والالفا اربيوتين" },
-  { name: "Marie’s niacinamide serum 30 ml", price: 375, category: "skin_care", img: "https://i.postimg.cc/NfJQN7cM/serum2.jpg", description: "سيرم بالهيالورنيك اسيد والنباسيناميد لتوحيد لون البشرة وتنظيم الدهون في البشرة " },
-  { name: "Marie’s face wash for normal & dry skin ", price: 250, category: "skin_care", img: "https://i.postimg.cc/qqXKd6jN/43690b91-b831-4d02-be82-2360757984e0.jpg", description: "غسول مرطب وملطف للبشرة العادية والجافة" },
-
-
-
-  // Body Care
-  
   { name: "Marie’s scented dry oil 50ml", price: 500, category: "body_care", img: "https://i.postimg.cc/5ydzTWWp/oil.jpg", description: "الزيت الجاف المرطب" },
-   { name: "Marie’s scented body lotion 250 ml", price: 350, category: "body_care", img: "https://i.postimg.cc/90rk8TVP/lotion.jpg", description: "لوشن مرطب للجسم " },
+  { name: "Marie’s Hyaluronic Acid shampoo 250ml ", price: 400, category: "hair_care", img: "https://i.postimg.cc/0j7mnxZG/cc46b901-3dfa-4984-9371-13c5d61c40b7.jpg", description: "شامبو مرطب ومغذي للشعر" },
+  { name: "Marie’s SPF 50 Sunscreen", price: 300, category: "sunscreens_care", img: "https://i.postimg.cc/3JmQMt2d/sunscreen.jpg", description: "واقي شمس بعامل حماية 50" }
 ];
 
 function renderProducts() {
-  const perfumeContainer = document.getElementById("perfumes-container");
-  const lipsContainer = document.getElementById("lips_care-container");
-  const skinContainer = document.getElementById("skin_care-container");
-  const bodyContainer = document.getElementById("body_care-container");
+  const sections = {
+    Perfumes: document.getElementById("perfumes-container"),
+    lips_care: document.getElementById("lips_care-container"),
+    skin_care: document.getElementById("skin_care-container"),
+    body_care: document.getElementById("body_care-container"),
+    hair_care: document.getElementById("hair_care-container"),
+    sunscreens_care: document.getElementById("sunscreens_care-container")
+  };
 
   products.forEach(product => {
     const div = document.createElement("div");
@@ -118,14 +197,11 @@ function renderProducts() {
     div.innerHTML = `
       <img src="${product.img}" alt="${product.name}">
       <h3>${product.name}</h3>
-      <h4>${product.description}</h4>
-      <p><strong>${product.price} LE</strong></p>
+      <p>${product.description}</p>
+      <strong>${product.price} LE</strong><br>
       <button onclick="addToCart('${product.name}', ${product.price})">Add to Cart</button>
     `;
-    if(product.category === "Perfumes") perfumeContainer.appendChild(div);
-    else if(product.category === "lips_care") lipsContainer.appendChild(div);
-    else if(product.category === "skin_care") skinContainer.appendChild(div);
-    else if(product.category === "body_care") bodyContainer.appendChild(div);
+    sections[product.category].appendChild(div);
   });
 }
 
@@ -144,17 +220,20 @@ function renderCart() {
     cartList.appendChild(li);
     total += item.price;
   });
+
   document.getElementById("total").textContent = total;
 
-  const phoneNumber = "201026178272";
   const customerName = document.getElementById("customerName").value || "Customer";
-  let message = `Hello Marie,%0AMy name is ${customerName}.%0AI would like to order:%0A`;
-  cart.forEach(item => message += `- ${item.name} (${item.price} LE)%0A`);
-  message += `%0ATotal: ${total} LE`;
-  document.getElementById("orderLink").href = `https://wa.me/${phoneNumber}?text=${message}`;
+  const customerPhone = document.getElementById("customerPhone").value || "No phone";
+
+  const whatsappMsg = `Hello, my name is ${customerName}%0AMy phone is ${customerPhone}%0AI would like to order:%0A` +
+    cart.map(i => `- ${i.name} (${i.price} LE)`).join("%0A") + `%0ATotal: ${total} LE`;
+
+  document.getElementById("orderLink").href = `https://wa.me/201026178272?text=${whatsappMsg}`;
 }
 
 document.getElementById("customerName").addEventListener("input", renderCart);
+document.getElementById("customerPhone").addEventListener("input", renderCart);
 
 function toggleCart() {
   document.querySelector('.cart').classList.toggle('show');
