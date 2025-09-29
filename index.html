@@ -311,6 +311,9 @@
   { name: "Marie’s face wash for normal & dry skin", price: 250, category: "skin_care",
     img: "https://i.postimg.cc/qqXKd6jN/43690b91-b831-4d02-be82-2360757984e0.jpg",
     description: "غسول مرطب وملطف للبشرة العادية والجافة" },
+     { name: "Marie’s Miracle scented Body Cream 200 gm ", price: 450, category: "skin_care",
+    img: "https://i.ibb.co/gZfQbWTH/8a93ef1b-0f95-4489-8aa0-c0da84c0295d.jpg",
+    description: "كريم الجسم بالرتينول وزبدة الشيا وفيتامين ه والجلسرين لترطيب وشد البشرة" },
 
   // Body Care
   { name: "Marie’s scented dry oil 50ml", price: 500, category: "body_care",
@@ -354,7 +357,7 @@ function renderProducts() {
     div.innerHTML = `
       <img src="${product.img}" alt="${product.name}" loading="lazy" />
       <h3>${product.name}</h3>
-      <p>${product.description}</p>
+      <h4>${product.description}</h4>
       <div class="price">${product.price} LE</div>
       <button data-idx="${idx}">Add to Cart</button>
     `;
@@ -421,7 +424,7 @@ function renderCart() {
     `\nTotal: ${total} LE`
   );
 
-  orderLink.href = `https://wa.me/201234567890?text=${message}`;
+  orderLink.href = `https://wa.me/201026178272?text=${message}`;
 
   document.querySelectorAll(".remove-btn").forEach(btn => {
     btn.addEventListener("click", () => {
@@ -440,6 +443,9 @@ document.getElementById("cartToggleBtn").addEventListener("click", () => {
 renderProducts();
 enableCategoryToggle();
 renderCart();
+document.getElementById("customerName").addEventListener("input", renderCart);
+document.getElementById("customerPhone").addEventListener("input", renderCart);
+
 </script>
 
 </body>
