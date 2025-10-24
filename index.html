@@ -258,7 +258,14 @@
     <h2>Sunscreens</h2>
     <div class="container" id="sunscreens_care-container"></div>
   </div>
+
+  <div class="category">
+  <h2>Men’s Care</h2>
+  <div class="container" id="mens_care-container"></div>
 </div>
+</div>
+
+
 
 <div class="cart" id="cart">
   <h2>Cart</h2>
@@ -277,7 +284,7 @@
 /* ✅ PART 2 WILL START WITH: const products = [...] */
  const products = [
   // Perfumes
-  { name: "Marie’s kayali sparkling bouquet", price: 400, category: "Perfumes",
+  { name: "Kayali sparkling lychee", price: 400, category: "Perfumes",
     img: "https://i.postimg.cc/qv9NnMYr/1d7b4e95-b7e8-4719-8d4d-6965032d9e47.jpg",
     description: "50 ml" },
   { name: "Marie’s La belle eau de toilette", price: 400, category: "Perfumes",
@@ -522,7 +529,7 @@
     description: "50 ml" },
      
      
-    
+   
 
   // Lips Care
   { name: "Marie’s lip balm (Pink)", price: 120, category: "lips_care",
@@ -565,7 +572,7 @@
     description: "ملمع الشفاة باللون الذي تفضليه او بدون لون مرطب ويعطي حجم اكبر للشفايف" },
    
   // Body Care
-  { name: "Marie’s scented dry oil 50ml", price: 500, category: "body_care",
+   { name: "Marie’s scented dry oil 50ml", price: 500, category: "body_care",
     img: "https://i.postimg.cc/5ydzTWWp/oil.jpg",
     description: "الزيت الجاف المرطب" },
   { name: "Marie’s scented body lotion 250 ml", price: 350, category: "body_care",
@@ -580,26 +587,72 @@
      { name: "Marie’s cracked heels cream 200gm ", price: 350, category: "body_care",
     img: "https://i.postimg.cc/nc6Y9dxP/1.jpg",
     description: "كريم تشققات الكعبين لكعب ناعم ومتساوي" },
+     { name: "Marie’s strawberry skin body & hand lotion 100 ml", price: 300, category: "body_care",
+    img: "https://i.postimg.cc/8CN07y5m/1.jpg",
+    description: "لوشن جلد الوزة لليدين وللجسم باليوريا ومستخلصات التفتيح لبشرة متساوية وناعمة وافتح " },
 
 
   // Hair Care
-   { name: "Marie’s Hyaluronic Acid shampoo 250ml", price: 400, category: "hair_care",
+    { name: "Marie’s Hyaluronic Acid shampoo 250ml", price: 400, category: "hair_care",
     img: "https://i.postimg.cc/SRS15gjp/1.jpg",
     description: "شامبو مرطب ومغذي للشعر" },
     { name: "Marie’s detangling hair serum 120 ml", price: 375, category: "hair_care",
     img: "https://i.postimg.cc/XN5wSf94/1.jpg",
     description: "سيرم فك التشابك لشعر سهل التصفيف ناعم ولامع" },
 
+ 
 
 
   // Sunscreens (example realistic-style images)
-  { name: "Marie’s SPF50 Sun Gel 100ml", price: 350, category: "sunscreens_care",
-    img: "https://i.postimg.cc/3JmQMt2d/sunscreen.jpg",
-    description: "واقي شمس جل خفيف غير لزج - حماية عالية" },
-  { name: "Marie’s Tinted Sunscreen 50ml", price: 400, category: "sunscreens_care",
-    img: "https://i.postimg.cc/Y9hJX8dJ/tintedsunscreen.jpg",
-    description: "واقي شمس ملون لتوحيد لون البشرة مع تغطية خفيفة" }
-];
+  { name: "Marie’s SPF Sunblock cream SPF 45", price: 350, category: "sunscreens_care",
+    img: "https://i.postimg.cc/pXB0gfkD/1.jpg",
+    description: "كريم واقي الشمس للاستخدام اليومي" },
+
+    // Men’s Care
+     { name: "Marie’s Hugo Boss for men eau de toilette ", price: 400, category: "mens_care",
+    img: "https://i.postimg.cc/NGbYPNjG/1.jpg",
+    description: "50ml" },
+    { name: "Marie’s Sauvage Elixir for men eau de toilette", price: 400, category: "mens_care",
+    img: "https://i.postimg.cc/rmW07911/1.jpg",
+    description: "50ml" },
+      { name: "Marie’s Bleu de Channel  for men eau de toilette ", price: 400, category: "mens_care",
+    img: "https://i.postimg.cc/Jz2snFPV/1.jpg",
+    description: "50ml" },
+     { name: "Marie’s Bad Boy for men eau de toilette", price: 400, category: "mens_care",
+    img: "https://i.postimg.cc/QdwMsTxz/1.jpg",
+    description: "50ml" },
+     { name: "Marie’s Side Effects for men eau de toilette", price: 400, category: "mens_care",
+    img: "https://i.postimg.cc/Tw9GyLfM/1.jpg",
+    description: "50ml" },
+
+  { name: "Marie’s Stronger with you intensely for men eau de toilette ", price: 400, category: "mens_care",
+    img: "https://i.postimg.cc/qRjVJPxp/1.jpg",
+    description: "50ml" },
+     { name: "Marie’s Mercedes Benz for men eau de toilette", price: 400, category: "mens_care",
+    img: "https://i.postimg.cc/XYFRGGgN/1.jpg",
+    description: "50ml" },
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  ];
+
+
+ 
+ 
+ 
 
 let cart = [];
 
@@ -611,8 +664,10 @@ function renderProducts() {
     skin_care: document.getElementById("skin_care-container"),
     body_care: document.getElementById("body_care-container"),
     hair_care: document.getElementById("hair_care-container"),
-    sunscreens_care: document.getElementById("sunscreens_care-container")
-  };
+    sunscreens_care: document.getElementById("sunscreens_care-container"), 
+  mens_care: document.getElementById("mens_care-container") // 👈 Added
+};
+
 
   Object.values(sections).forEach(sec => sec.innerHTML = "");
 
@@ -689,7 +744,7 @@ function renderCart() {
     `\nTotal: ${total} LE`
   );
 
-  orderLink.href = `https://wa.me/201026178272?text=${message}`;
+  orderLink.href = `https://wa.me/201276740902?text=${message}`;
 
   document.querySelectorAll(".remove-btn").forEach(btn => {
     btn.addEventListener("click", () => {
