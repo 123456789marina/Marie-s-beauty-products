@@ -1,787 +1,190 @@
-  <!DOCTYPE html>
+ <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width,initial-scale=1" />
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Marie’s Beauty Products</title>
+
 <style>
-  :root{
-    --pink-100: #fff0f6;
-    --pink-200: #ffd6e8;
-    --pink-300: #ffb6d9;
-    --pink-400: #ff79b0;
-    --accent-green: #25d366;
-    --muted: #666;
-    --card-shadow: 0 6px 18px rgba(0,0,0,0.08);
-  }
+:root{
+ --pink-100:#fff0f6;
+ --pink-200:#ffd6e8;
+ --pink-300:#ffb6d9;
+ --pink-400:#ff79b0;
+ --green:#25d366;
+}
+body{margin:0;background:var(--pink-100);font-family:Arial}
+header{text-align:center;padding:20px;background:linear-gradient(var(--pink-300),var(--pink-200));color:#fff}
 
-  * { box-sizing: border-box; }
+.main-content{padding:20px;display:flex;flex-wrap:wrap;gap:15px}
+.category{flex:1 1 300px}
+.category h2{
+ background:var(--pink-400);padding:10px;border-radius:8px;color:#fff;
+ cursor:pointer;position:relative
+}
+.category h2::after{content:"+";position:absolute;right:10px;font-weight:bold}
+.category.open h2::after{content:"-"}
+.container{display:none;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:12px}
 
-  body {
-    font-family: Arial, sans-serif;
-    margin: 0;
-    background: var(--pink-100);
-    color: #222;
-  }
+.product{
+ background:#fff;padding:10px;border-radius:10px;text-align:center;
+ box-shadow:0 4px 10px rgba(0,0,0,0.08)
+}
+.product img{width:100%;height:140px;object-fit:cover;border-radius:8px}
+.product button{margin-top:auto;background:var(--pink-400);color:#fff;border:none;padding:8px;border-radius:6px;cursor:pointer;width:100%}
 
-  header {
-    text-align: center;
-    padding: 26px 16px;
-    background: linear-gradient(180deg,var(--pink-300),var(--pink-200));
-    color: white;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.06);
-  }
-  header h1 { margin: 0; font-size: 24px; letter-spacing: 0.2px; }
-  header p { margin: 6px 0 0; font-size: 14px; opacity: 0.95; }
+.cart{
+ position:fixed;top:0;right:-350px;width:330px;height:100%;background:#fff;padding:15px;
+ border-left:2px solid #ddd;transition:.3s;z-index:10
+}
+.cart.show{right:0}
+#cart-items li{
+ background:#fafafa;padding:8px;border-radius:6px;margin:5px 0;
+ display:flex;justify-content:space-between;font-size:14px
+}
+.cart-toggle{
+ position:fixed;bottom:20px;right:20px;background:var(--pink-400);
+ color:#fff;padding:15px;border-radius:50%;border:none;cursor:pointer;font-size:20px
+}
 
-  .main-content {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 18px;
-    padding: 22px;
-    align-items: flex-start;
-  }
-
-  .category {
-    flex: 1 1 300px;
-    min-width: 260px;
-    max-width: 360px;
-    background: transparent;
-  }
-
-  .category h2 {
-    margin: 0 0 12px 0;
-    background: var(--pink-400);
-    color: white;
-    padding: 10px 12px;
-    border-radius: 10px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    height: 52px;
-    font-size: 18px;
-    text-align: center;
-    box-shadow: 0 2px 6px rgba(0,0,0,0.06);
-    cursor: pointer;
-    position: relative;
-  }
-
-  .category h2::after {
-    content: "＋";
-    position: absolute;
-    right: 12px;
-    font-weight: bold;
-  }
-
-  .category.open h2::after {
-    content: "−";
-  }
-
-  .container {
-    display: none;
-    grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
-    gap: 12px;
-  }
-
-  .product {
-    background: white;
-    border-radius: 12px;
-    padding: 10px;
-    text-align: center;
-    box-shadow: var(--card-shadow);
-    display: flex;
-    flex-direction: column;
-    gap: 8px;
-    min-height: 260px;
-  }
-
-  .product img {
-    width: 100%;
-    height: 140px;
-    object-fit: cover;
-    border-radius: 8px;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.05) inset;
-  }
-
-  .product h3 {
-    margin: 0;
-    font-size: 14px;
-    line-height: 1.15;
-    min-height: 34px;
-  }
-
-  .product p {
-    margin: 0;
-    font-size: 12px;
-    color: var(--muted);
-    min-height: 34px;
-  }
-
-  .product .price {
-    margin-top: auto;
-    font-weight: bold;
-    font-size: 14px;
-    color: #222;
-  }
-
-  .product button {
-    margin-top: 8px;
-    background: var(--pink-400);
-    color: white;
-    border: none;
-    padding: 9px 10px;
-    border-radius: 8px;
-    cursor: pointer;
-    font-weight: 600;
-  }
-  .product button:hover { transform: translateY(-1px); }
-
-  .cart {
-    position: fixed;
-    right: -360px;
-    top: 0;
-    width: 340px;
-    height: 100%;
-    background: white;
-    box-shadow: -12px 0 30px rgba(0,0,0,0.08);
-    padding: 20px;
-    transition: right 0.28s ease;
-    overflow-y: auto;
-    z-index: 1200;
-  }
-
-  .cart.show { right: 0; }
-
-  .cart h2 { margin: 0 0 8px 0; font-size: 20px; }
-  .cart label { display:block; font-size:13px; margin-top:10px; color:#333; }
-  .cart input[type="text"] {
-    width: 100%;
-    padding: 10px;
-    border-radius: 8px;
-    border: 1px solid #eee;
-    margin-top:6px;
-    font-size:14px;
-  }
-
-  #cart-items { list-style:none; padding:0; margin:12px 0; }
-  #cart-items li {
-    padding: 8px 6px;
-    border-radius: 6px;
-    background: #fafafa;
-    margin-bottom:8px;
-    font-size: 13px;
-    display:flex;
-    justify-content: space-between;
-    gap: 8px;
-    align-items:center;
-  }
-
-  #cart-items li .remove-btn {
-    background: transparent;
-    border: none;
-    color: var(--muted);
-    cursor: pointer;
-    font-size: 12px;
-  }
-
-  .total-row { margin-top: 10px; font-weight:700; font-size:16px; }
-  .order-btn {
-    display:block;
-    margin-top:12px;
-    background: var(--accent-green);
-    color: white;
-    padding: 12px;
-    text-align:center;
-    text-decoration:none;
-    border-radius: 10px;
-    font-weight:700;
-  }
-
-  .cart-toggle {
-    position: fixed;
-    bottom: 20px;
-    right: 20px;
-    background: var(--pink-400);
-    color: white;
-    padding: 12px 14px;
-    border-radius: 50%;
-    border: none;
-    cursor: pointer;
-    font-size: 20px;
-    box-shadow: 0 6px 18px rgba(0,0,0,0.12);
-    z-index: 1250;
-  }
-
-  @media (max-width: 1100px) {
-    .main-content { padding: 14px; }
-    .category { max-width: none; flex-basis: 100%; }
-    .cart { width: 100%; right: -100%; height: 50%; bottom: 0; top: auto; border-radius: 12px 12px 0 0; padding-bottom: 36px; }
-    .cart.show { right: 0; right: 0; bottom: 0; }
-    .cart-toggle { right: 18px; bottom: 18px; }
-  }
+/* ✅ toast box */
+#toast{
+ position:fixed;bottom:90px;right:20px;background:var(--pink-400);color:#fff;
+ padding:12px 15px;border-radius:10px;font-weight:bold;display:none;
+ animation:fade 2.4s forwards
+}
+@keyframes fade{
+ 0%{opacity:0;transform:translateY(10px)}
+ 15%{opacity:1;transform:translateY(0)}
+ 85%{opacity:1}
+ 100%{opacity:0}
+}
 </style>
 </head>
-<body>
 
+<body>
 <header>
-  <h1>Marie’s Beauty Products</h1>
-  <p>For skin care, hair care and perfumes</p>
+<h1>Marie’s Beauty Store</h1>
+<p>Skin • Hair • Perfumes & more 💗</p>
 </header>
 
 <div class="main-content">
-  <div class="category">
-    <h2>Perfumes</h2>
-    <div class="container" id="perfumes-container"></div>
-  </div>
-
-  <div class="category">
-    <h2>Lips Care</h2>
-    <div class="container" id="lips_care-container"></div>
-  </div>
-
-  <div class="category">
-    <h2>Skin Care</h2>
-    <div class="container" id="skin_care-container"></div>
-  </div>
-
-  <div class="category">
-    <h2>Body Care</h2>
-    <div class="container" id="body_care-container"></div>
-  </div>
-
-  <div class="category">
-    <h2>Hair Care</h2>
-    <div class="container" id="hair_care-container"></div>
-  </div>
-
-  <div class="category">
-    <h2>Sunscreens</h2>
-    <div class="container" id="sunscreens_care-container"></div>
-  </div>
-
-  <div class="category">
-  <h2>Men’s Care</h2>
-  <div class="container" id="mens_care-container"></div>
+ <div class="category"><h2>Perfumes</h2><div class="container" id="perfumes-container"></div></div>
+ <div class="category"><h2>Lips Care</h2><div class="container" id="lipscare-container"></div></div>
+ <div class="category"><h2>Skin Care</h2><div class="container" id="skincare-container"></div></div>
+ <div class="category"><h2>Body Care</h2><div class="container" id="bodycare-container"></div></div>
+ <div class="category"><h2>Hair Care</h2><div class="container" id="haircare-container"></div></div>
+ <div class="category"><h2>Sunscreens</h2><div class="container" id="sunscreens-container"></div></div>
+ <div class="category"><h2>Men's Care</h2><div class="container" id="menscare-container"></div></div>
 </div>
-</div>
-
-
 
 <div class="cart" id="cart">
-  <h2>Cart</h2>
-  <label for="customerName">Your Name:</label>
-  <input type="text" id="customerName" placeholder="Enter your name">
-  <label for="customerPhone">Your Phone Number:</label>
-  <input type="text" id="customerPhone" placeholder="Enter your phone number">
-  <ul id="cart-items"></ul>
-  <p class="total-row">Total: LE <span id="total">0</span></p>
-  <a id="orderLink" class="order-btn" target="_blank" rel="noopener">Send Order via WhatsApp</a>
+<h2>Cart</h2>
+<ul id="cart-items"></ul>
+<p><b>Total: LE <span id="total">0</span></b></p>
 </div>
 
-<button class="cart-toggle" id="cartToggleBtn" aria-label="Open cart">🛒</button>
+<button class="cart-toggle" id="toggleCart">🛒</button>
+<div id="toast"></div>
 
 <script>
-/* ✅ PART 2 WILL START WITH: const products = [...] */
- const products = [
-  // Perfumes
-  { name: "Kayali sparkling lychee", price: 400, category: "Perfumes",
-    img: "https://i.postimg.cc/qv9NnMYr/1d7b4e95-b7e8-4719-8d4d-6965032d9e47.jpg",
-    description: "50 ml" },
-  { name: "Marie’s La belle eau de toilette", price: 400, category: "Perfumes",
-    img: "https://i.postimg.cc/K8rYKrns/c1b8e16b-b38d-4d6d-815d-66eb324624c2.jpg",
-    description: "50 ml" },
-  { name: "Marie’s Body Splash 120ml", price: 300, category: "Perfumes",
-    img: "https://i.postimg.cc/TYCvwbJX/body-care.jpg",
-    description: "سبراي منعش مرطب للجسم بروائح متعددة" },
-     { name: "Marie’s sol de Janero 59 eau de toilette", price: 400, category: "Perfumes",
-    img: "https://i.postimg.cc/RZtrwbHD/1.jpg",
-    description: "50 ml" },
-     { name: "Marie’s vanilla sex eau de toilette", price: 400, category: "Perfumes",
-    img: "https://i.postimg.cc/pLJw05sP/1.jpg",
-    description: "50 ml" },
-     { name: "Marie’s Narciso poudrée eau de toilette", price: 400, category: "Perfumes",
-    img: "https://i.postimg.cc/BQG7dQL8/1.jpg",
-    description: "50 ml" },
-    { name: "Marie’s Paris Amour eau de toilette", price: 350, category: "Perfumes",
-    img: "https://i.postimg.cc/X73xsHmQ/1.jpg",
-    description: "50 ml" },
-    { name: "Marie’s Guidance Amouage eau de toilette", price: 400, category: "Perfumes",
-    img: "https://i.postimg.cc/Nfg76y2N/1.jpg",
-    description: "50 ml" },
-     { name: "Marie’s Aventus creed for men eau de toilette", price: 400, category: "mens_care",
-    img: "https://i.postimg.cc/J7Qjz1Yh/1.jpg",
-    description: "50 ml" },
-     { name: "Marie’s Gingham Gorgeous eau de toilette", price: 350, category: "Perfumes",
-    img: "https://i.postimg.cc/X7JBN9y2/1.jpg",
-    description: "50 ml" },
-     { name: "Marie’s Red Tobacco unisex eau de toilette ", price: 400, category: "Perfumes",
-    img: "https://i.postimg.cc/HsVj1HqD/1.jpg",
-    description: "50 ml" },
-     { name: "Marie’s Red Tobacco unisex eau de toilette ", price: 400, category: "mens_care",
-    img: "https://i.postimg.cc/HsVj1HqD/1.jpg",
-    description: "50 ml" },
-     { name: "Marie’s sol de janeiro 62 eau de toilette", price: 400, category: "Perfumes",
-    img: "https://i.postimg.cc/rw5VqpQ2/1.jpg",
-    description: "50 ml" },
-     { name: "Marie’s Bare vanilla eau de toilette", price: 350, category: "Perfumes",
-    img: "https://i.postimg.cc/bJrfSYHN/1.jpg",
-    description: "50 ml" },
-     { name: "Marie’s scandal eau de toilette ", price: 400, category: "Perfumes",
-    img: "https://i.postimg.cc/d1k9K08W/1.jpg",
-    description: "50 ml" },
-     { name: "Marie’s champagne Toast eau de toilette", price: 350, category: "Perfumes",
-    img: "https://i.postimg.cc/V6nbR09n/1.jpg",
-    description: "50 ml" },
-     { name: "Marie’s Strawberry Pound cake eau de toilette", price: 350, category: "Perfumes",
-    img: "https://i.postimg.cc/KYXG5q0R/1.jpg",
-    description: "50 ml" },
-    { name: "Marie’s Dark Purple eau de toilette", price: 400, category: "Perfumes",
-    img: "https://i.postimg.cc/9MmjxvZG/1.jpg",
-    description: "50 ml" },
-     { name: "Marie’s Thousand Wishes eau de toilette", price: 350, category: "Perfumes",
-    img: "https://i.postimg.cc/d3hppv1J/1.jpg",
-    description: "50 ml" },
-    { name: "Marie’s Bombshell eau de toilette", price: 350, category: "Perfumes",
-    img: "https://i.postimg.cc/LXGFHhG8/1.jpg",
-    description: "50 ml" },
-    { name: "Marie’s Gucci Rush eau de toilette", price: 400, category: "Perfumes",
-    img: "https://i.postimg.cc/Y0QZMR6C/1.jpg",
-    description: "50 ml" },
-    { name: "Marie’s Yara candy eau de toilette", price: 400, category: "Perfumes",
-    img: "https://i.postimg.cc/kMWpVjbz/1.jpg",
-    description: "50 ml" },
-     { name: "Marie’s Very Sexy Now eau de toilette", price: 350, category: "Perfumes",
-    img: "https://i.postimg.cc/Ghcq4brc/1.jpg",
-    description: "50 ml" },
-     { name: "Marie’s Le Mâle Élixir for men eau de toilette", price: 400, category: "mens_care",
-    img: "https://i.postimg.cc/Dyjdmsx7/1.jpg",
-    description: "50 ml" },
-    { name: "Marie’s Cactus Blossom eau de toilette", price: 350, category: "Perfumes",
-    img: "https://i.postimg.cc/d08yRTmz/1.jpg",
-    description: "50 ml" },
-     { name: "Marie’s Mad about You eau de toilette", price: 350, category: "Perfumes",
-    img: "https://i.postimg.cc/13FnPNT6/1.jpg",
-    description: "50 ml" },
-     { name: "Marie’s Aqua di Gio for men eau de toilette", price: 400, category: "mens_care",
-    img: "https://i.postimg.cc/NMjjyyNp/1.jpg",
-    description: "50 ml" },
-    { name: "Marie’s Delina exclusif eau de toilette", price: 400, category: "Perfumes",
-    img: "https://i.postimg.cc/bJ5psmSx/1.jpg",
-    description: "50 ml" },
-     { name: "Marie’s Delina la rosee eau de toilette", price: 400, category: "Perfumes",
-    img: "https://i.postimg.cc/J4N02WBg/1.jpg",
-    description: "50 ml" },
-     { name: "Marie’s Tobacco Vanilla for men eau de toilette", price: 400, category: "mens_care",
-    img: "https://i.postimg.cc/kghmjjfd/1.jpg",
-    description: "50 ml" },
-    { name: "Marie’s Legend Night for men eau de toilette", price: 400, category: "mens_care",
-    img: "https://i.postimg.cc/kgH0N2XF/1.jpg",
-    description: "50 ml" },
-    { name: "Marie’s Gingham eau de toilette", price: 350, category: "Perfumes",
-    img: "https://i.postimg.cc/Znf7TQWG/1.jpg",
-    description: "50 ml" },
-     { name: "Marie’s Idole eau de toilette ", price: 400, category: "Perfumes",
-    img: "https://i.postimg.cc/bNsLx3D2/1.jpg",
-    description: "50 ml" },
-    { name: "Marie’s Gucci Bamboo eau de toilette", price: 400, category: "Perfumes",
-    img: "https://i.postimg.cc/dQXGYv1p/1.jpg",
-    description: "50 ml" },
-    { name: "Marie’s Bianco latte eau de toilette", price: 400, category: "Perfumes",
-    img: "https://i.postimg.cc/mgSwRqKy/1.jpg",
-    description: "50 ml" },
-    { name: "Marie’s Arabian Tonka eau de toilette", price: 400, category: "Perfumes",
-    img: "https://i.postimg.cc/dVJ2W6Dj/1.jpg",
-    description: "50 ml" },
-    { name: "Marie’s Narcotic Delights eau de toilette", price: 400, category: "Perfumes",
-    img: "https://i.postimg.cc/CLsDf8J0/1.jpg",
-    description: "50 ml" },
-     { name: "Marie’s Narcotic Delights eau de toilette", price: 400, category: "mens_care",
-    img: "https://i.postimg.cc/CLsDf8J0/1.jpg",
-    description: "50 ml" },
-     { name: "Marie’s Yum Bougee Marshmallow eau de toilette", price: 400, category: "Perfumes",
-    img: "https://i.postimg.cc/0Q7r1gHL/1.jpg",
-    description: "50 ml" },
-    { name: "Marie’s In the stars eau de toilette", price: 350, category: "Perfumes",
-    img: "https://i.postimg.cc/ncWfr9b7/1.jpg",
-    description: "50 ml" },
-     { name: "Marie’s Rose Vanilla eau de toilette", price: 400, category: "Perfumes",
-    img: "https://i.postimg.cc/3w7Sx3RJ/1.jpg",
-    description: "50 ml" },
-     { name: "Marie’s Lost Cherry unisex eau de toilette", price: 400, category: "Perfumes",
-    img: "https://i.postimg.cc/xTMBfx52/1.jpg",
-    description: "50 ml" },
-     { name: "Marie’s Lost Cherry unisex eau de toilette", price: 400, category: "mens_care",
-    img: "https://i.postimg.cc/xTMBfx52/1.jpg",
-    description: "50 ml" },
-     { name: "Marie’s Khamra eau de toilette", price: 400, category: "Perfumes",
-    img: "https://i.postimg.cc/Y9vyJb0N/1.jpg",
-    description: "50 ml" },
-    { name: "Marie’s Gucci Flora eau de toilette", price: 400, category: "Perfumes",
-    img: "https://i.postimg.cc/HLh64XzQ/1.jpg",
-    description: "50 ml" },
-    { name: "Marie’s Fairy Tales eau de toilette ", price: 350, category: "Perfumes",
-    img: "https://i.postimg.cc/pXJkcgC4/1.jpg",
-    description: "50 ml" },
-    { name: "Marie’s Enchanted Apple eau de toilette", price: 350, category: "Perfumes",
-    img: "https://i.postimg.cc/mrzY4q3F/1.jpg",
-    description: "50 ml" },
-    { name: "Marie’s Black Afgano for men eau de toilette", price: 400, category: "mens_care",
-    img: "https://i.postimg.cc/ryJtBM6Z/1.jpg",
-    description: "50 ml" },
-    { name: "Marie’s Si Red eau de toilette ", price: 400, category: "Perfumes",
-    img: "https://i.postimg.cc/tTzYGtc9/1.jpg",
-    description: "50 ml" },
-    { name: "Marie’s Pink Chiffon eau de toilette", price: 350, category: "Perfumes",
-    img: "https://i.postimg.cc/zGRvG1Mm/1.jpg",
-    description: "50 ml" },
-    { name: "Marie’s Love is Heavenly eau de toilette ", price: 350, category: "Perfumes",
-    img: "https://i.postimg.cc/66jpV3x9/1.jpg",
-    description: "50 ml" },
-     { name: "Marie’s Sexy little Things eau de toilette", price: 350, category: "Perfumes",
-    img: "https://i.postimg.cc/XJNndM2v/1.jpg",
-    description: "50 ml" },
-     { name: "Marie’s Coconut Passion eau de toilette", price: 350, category: "Perfumes",
-    img: "https://i.postimg.cc/tJZQN9FV/1.jpg",
-    description: "50 ml" },
-     { name: "Marie’s Good Girl eau de toilette ", price: 400, category: "Perfumes",
-    img: "https://i.postimg.cc/zf0smyjR/1.jpg",
-    description: "50 ml" },
-     { name: "Marie’s Love Spell eau de toilette", price: 350, category: "Perfumes",
-    img: "https://i.postimg.cc/MTW8KRpB/1.jpg",
-    description: "50 ml" },
-     { name: "Marie’s Pure seduction eau de toilette", price: 350, category: "Perfumes",
-    img: "https://i.postimg.cc/FskwvGxr/1.jpg",
-    description: "50 ml" },
-     { name: "Marie’s Sugar Plum eau de toilette ", price: 350, category: "Perfumes",
-    img: "https://i.postimg.cc/wjQzK06p/1.jpg",
-    description: "50 ml" },
-    { name: "Marie’s Dark Angel eau de toilette ", price: 350, category: "Perfumes",
-    img: "https://i.postimg.cc/x1nrPMK9/1.jpg",
-    description: "50 ml" },
-     { name: "Marie’s La vie est belle l’extrait eau de toilette", price: 400, category: "Perfumes",
-    img: "https://i.postimg.cc/RZM8t9B6/1.jpg",
-    description: "50 ml" },
-    { name: "Marie’s Black Orchid eau de toilette", price: 400, category: "Perfumes",
-    img: "https://i.postimg.cc/yN2vLCwx/1.jpg",
-    description: "50 ml" },
-    { name: "Marie’s Vanilla powder eau de toilette", price: 400, category: "Perfumes",
-    img: "https://i.postimg.cc/Njz40wGV/1.jpg",
-    description: "50 ml" },
-     { name: "Marie’s My euphoria eau de toilette", price: 400, category: "Perfumes",
-    img: "https://i.postimg.cc/8CvhPJ0F/1.jpg",
-    description: "50 ml" },
-     { name: "Marie’s Blooming Bouquet eau de toilette ", price: 400, category: "Perfumes",
-    img: "https://i.postimg.cc/XqYGFpQG/1.jpg",
-    description: "50 ml" },
-     { name: "Marie’s Ani Nishane unisex eau de toilette ", price: 400, category: "Perfumes",
-    img: "https://i.postimg.cc/fT3kN4F3/1.jpg",
-    description: "50 ml" },
-     { name: "Marie’s Ani Nishane unisex eau de toilette ", price: 400, category: "mens_care",
-    img: "https://i.postimg.cc/fT3kN4F3/1.jpg",
-    description: "50 ml" },
-     { name: "Marie’s Paris Hilton eau de toilette ", price: 400, category: "Perfumes",
-    img: "https://i.postimg.cc/RZ7SSvTm/1.jpg",
-    description: "50 ml" },
-     { name: "Marie’s Amber Blush eau de toilette ", price: 350, category: "Perfumes",
-    img: "https://i.postimg.cc/kGRCkC45/1.jpg",
-    description: "50 ml" },
-     { name: "Marie’s Dark Kiss eau de toilette", price: 350, category: "Perfumes",
-    img: "https://i.postimg.cc/FKF7wfQQ/1.jpg",
-    description: "50 ml" },
-     { name: "Marie’s Japanese Cherry Blossom eau de toilette", price: 350, category: "Perfumes",
-    img: "https://i.postimg.cc/tC07pvHv/1.jpg",
-    description: "50 ml" },
-     { name: "Marie’s Burberry Her eau de toilette", price: 400, category: "Perfumes",
-    img: "https://i.postimg.cc/qBKMbcCK/1.jpg",
-    description: "50 ml" },
-    { name: "Marie’s Pink Sugar eau de toilette", price: 400, category: "Perfumes",
-    img: "https://i.postimg.cc/nrKxHkvq/1.jpg",
-    description: "50 ml" },
-     { name: "Marie’s Caramel cheesecake eau de toilette", price: 350, category: "Perfumes",
-    img: "https://i.postimg.cc/5yJckCZP/1.jpg",
-    description: "50 ml" },
-     { name: "Marie’s Secret Charm eau de toilette ", price: 350, category: "Perfumes",
-    img: "https://i.postimg.cc/Tw8Bpb29/1.jpg",
-    description: "50 ml" },
-     { name: "Marie’s Warm Vanilla eau de toilette ", price: 350, category: "Perfumes",
-    img: "https://i.postimg.cc/MKs41NK5/1.jpg",
-    description: "50 ml" },
-     { name: "Marie’s Bourbon Strawberry & vanilla eau de toilette ", price: 350, category: "Perfumes",
-    img: "https://i.postimg.cc/wvc4MbG0/1.jpg",
-    description: "50 ml" },
-    { name: "Marie’s Dahlia eau de toilette", price: 350, category: "Perfumes",
-    img: "https://i.postimg.cc/fyqK04jm/1.jpg",
-    description: "50 ml" },
-     { name: "Marie’s You’re the one eau de toilette ", price: 350, category: "Perfumes",
-    img: "https://i.postimg.cc/Hnn0mZGF/1.jpg",
-    description: "50 ml" },
-    { name: "Marie’s City of stars eau de toilette", price: 400, category: "Perfumes",
-    img: "https://i.postimg.cc/PqM1wsdX/1.jpg",
-    description: "50 ml" },
-    { name: "Marie’s Baby powder eau de toilette ", price: 400, category: "Perfumes",
-    img: "https://i.postimg.cc/VNzC1Gn3/1.jpg",
-    description: "50 ml" },
-     { name: "Marie’s Frosted cupcake eau de toilette", price: 350, category: "Perfumes",
-    img: "https://i.postimg.cc/Vk8RrFXM/1.jpg",
-    description: "50 ml" },
-     { name: "Marie’s Rare gold eau de toilette", price: 400, category: "Perfumes",
-    img: "https://i.postimg.cc/kXxNmtLm/1.jpg",
-    description: "50 ml" },
-     { name: "Marie’s Faraway eau de toilette", price: 400, category: "Perfumes",
-    img: "https://i.postimg.cc/02dS31Jp/1.jpg",
-    description: "50 ml" },
-      { name: "Marie’s Vanilla ice cream eau de toilette", price: 400, category: "Perfumes",
-    img: "https://i.postimg.cc/yYPJjhwJ/1.jpg",
-    description: "50 ml" },
-     { name: "Marie’s Versace Eros for men eau de toilette", price: 400, category: "mens_care",
-    img: "https://i.postimg.cc/QdzdYfSp/1.jpg",
-    description: "50 ml" },
-      { name: "Marie’s Dunhill desire red for men eau de toilette", price: 400, category: "mens_care",
-    img: "https://i.postimg.cc/rFFy8BPg/1.jpg",
-    description: "50 ml" },
-     
-     
-   
+// ✅ Products list
+const products = [
+ {name:"Kayali Sparkling Lychee",price:400,category:"Perfumes",img:"https://i.postimg.cc/qv9NnMYr/1d7b4e95-b7e8-4719-8d4d-6965032d9e47.jpg",description:"50ml"}
+];
 
-  // Lips Care
-  { name: "Marie’s lip balm (Pink)", price: 120, category: "lips_care",
-    img: "https://i.postimg.cc/zGcz1pWp/1b6b949e-5359-4ea9-9d3c-81060d303b13.jpg",
-    description: "مرطب الشفاه باللون الوردي وطعم الكريز" },
-  { name: "Marie’s neutral lip balm (Vanilla)", price: 120, category: "lips_care",
-    img: "https://i.postimg.cc/P524fvrz/85ad8d63-8b66-45aa-b646-0cf28e369a31.jpg",
-    description: "مرطب الشفاه بدون لون وطعم الفانيلا" },
-    { name: "Marie’s neutral lip balm (Vanilla)", price: 120, category: "mens_care",
-    img: "https://i.postimg.cc/P524fvrz/85ad8d63-8b66-45aa-b646-0cf28e369a31.jpg",
-    description: "مرطب الشفاه بدون لون وطعم الفانيلا" },
+let cart=[];
 
-  // Skin Care
-  { name: "Marie’s retinol night cream", price: 450, category: "skin_care",
-    img: "https://i.postimg.cc/8CbVzHf4/40a3ebdc-e8ee-4478-b2e8-db813f0109c5.jpg",
-    description: "كريم الليل بالرتينول ضد التجاعيد" },
-  { name: "Marie’s day cream", price: 350, category: "skin_care",
-    img: "https://i.postimg.cc/P5x6wQ7b/image.jpg",
-    description: "كريم مرطب للنهار" },
-  { name: "Marie’s alpha arbutin serum 30ml", price: 375, category: "skin_care",
-    img: "https://i.postimg.cc/HsvNGrK3/serum.jpg",
-    description: "سيرم التفتيح بالهيالورنيك اسيد والالفا اربيوتين" },
-  { name: "Marie’s niacinamide serum 30 ml", price: 375, category: "skin_care",
-    img: "https://i.postimg.cc/NfJQN7cM/serum2.jpg",
-    description: "سيرم بالهيالورنيك اسيد والنباسيناميد لتوحيد لون البشرة وتنظيم الدهون في البشرة" },
-  { name: "Marie’s face wash for normal & dry skin", price: 250, category: "skin_care",
-    img: "https://i.postimg.cc/qqXKd6jN/43690b91-b831-4d02-be82-2360757984e0.jpg",
-    description: "غسول مرطب وملطف للبشرة العادية والجافة" },
-    { name: "Marie’s Salicylic Acid face wash 250 ml", price: 275, category: "skin_care",
-    img: "https://i.postimg.cc/x1M8x5mb/1.jpg",
-    description: "غسول للبشرة الدهنية بالساليسيلك اسيد يقلل الرؤوس السوداء ويقلل دهون الوجه" },
-     { name: "Marie’s eye cream gel 15 ml", price: 300, category: "skin_care",
-    img: "https://i.postimg.cc/Rh27P8wv/e90b8c5e-9d93-4cb4-a094-6f5e62d5f075.jpg",
-    description: "كريم چل تحت العين يرطب ويقلل التجاعيد ويفتح الهالات السوداء " },
-    { name: "Marie’s peptides serum 30ml ", price: 375, category: "skin_care",
-    img: "https://i.postimg.cc/sXvvcr96/1.jpg",
-    description: "سيرم للوجه يقلل التجاعيد بال argireline" },
-     { name: "Marie co-Q10 serum 30 ml ", price: 375, category: "skin_care",
-    img: "https://i.postimg.cc/MHwJG0T1/1.jpg",
-    description: "سيرم للوجه مضاد للأكسدة" },
-    { name: "Marie’s plumbing moisturizing lip gloss 10ml ", price: 200, category: "skin_care",
-    img: "https://i.postimg.cc/k44tp89H/1.jpg",
-    description: "ملمع الشفاة باللون الذي تفضليه او بدون لون مرطب ويعطي حجم اكبر للشفايف" },
-   
-  // Body Care
-   { name: "Marie’s scented dry oil 50ml", price: 500, category: "body_care",
-    img: "https://i.postimg.cc/5ydzTWWp/oil.jpg",
-    description: "الزيت الجاف المرطب" },
-  { name: "Marie’s scented body lotion 250 ml", price: 350, category: "body_care",
-    img: "https://i.postimg.cc/90rk8TVP/lotion.jpg",
-    description: "لوشن مرطب للجسم" },
-      { name: "Marie’s Miracle scented Body Cream 200 gm ", price: 450, category: "body_care",
-    img: "https://i.ibb.co/gZfQbWTH/8a93ef1b-0f95-4489-8aa0-c0da84c0295d.jpg",
-    description: "كريم الجسم بالرتينول وزبدة الشيا وفيتامين ه والجلسرين لترطيب وشد البشرة" },
-     { name: "Marie’s Miracle scented Hand cream 60 gm ", price: 200, category: "body_care",
-    img: "https://i.postimg.cc/wvXYT8Tc/6f04b39c-62a1-4b4f-bf04-0c2e781c0796.jpg",
-    description: "كريم الايدي بالرتينول وزبدة الشيا وفيتامين ه لترطيب وشد الايدي" },
-     { name: "Marie’s cracked heels cream 200gm ", price: 400, category: "body_care",
-    img: "https://i.postimg.cc/nc6Y9dxP/1.jpg",
-    description: "كريم تشققات الكعبين لكعب ناعم ومتساوي" },
-     { name: "Marie’s strawberry skin body & hand lotion 100 ml", price: 300, category: "body_care",
-    img: "https://i.postimg.cc/8CN07y5m/1.jpg",
-    description: "لوشن جلد الوزة لليدين وللجسم باليوريا ومستخلصات التفتيح لبشرة متساوية وناعمة وافتح " },
+// ✅ Show products in right container
+function renderProducts(){
+ const prefix = {
+   "perfumes":"perfumes-container",
+   "lips care":"lipscare-container",
+   "skin care":"skincare-container",
+   "body care":"bodycare-container",
+   "hair care":"haircare-container",
+   "sunscreens":"sunscreens-container",
+   "men's care":"menscare-container"
+ };
 
+ Object.values(prefix).forEach(id=>document.getElementById(id).innerHTML="");
 
-  // Hair Care
-    { name: "Marie’s Hyaluronic Acid shampoo 250ml", price: 400, category: "hair_care",
-    img: "https://i.postimg.cc/SRS15gjp/1.jpg",
-    description: "شامبو مرطب ومغذي للشعر" },
-    { name: "Marie’s detangling hair serum 120 ml", price: 375, category: "hair_care",
-    img: "https://i.postimg.cc/XN5wSf94/1.jpg",
-    description: "سيرم فك التشابك لشعر سهل التصفيف ناعم ولامع" },
+ products.forEach((p,i)=>{
+  let key = p.category.toLowerCase();
+  let target = prefix[key];
+  if(!target)return;
 
- 
+  document.getElementById(target).innerHTML+=`
+  <div class="product">
+   <img src="${p.img}">
+   <h3>${p.name}</h3>
+   <p>${p.description}</p>
+   <b>${p.price} LE</b><br>
+   <button onclick="addToCart(${i})">Add to Cart</button>
+  </div>`;
+ });
+}
 
+// ✅ Toast message
+function showToast(msg){
+ let t=document.getElementById("toast");
+ t.innerText=msg;
+ t.style.display="block";
+ setTimeout(()=>t.style.display="none",2200);
+}
 
-  // Sunscreens (example realistic-style images)
-  { name: "Marie’s SPF Sunblock cream SPF 45 60 gm", price: 650, category: "sunscreens_care",
-    img: "https://i.postimg.cc/pXB0gfkD/1.jpg",
-    description: "كريم واقي الشمس للاستخدام اليومي" },
+// ✅ Add to cart
+function addToCart(i){
+ let item=cart.find(x=>x.name===products[i].name);
+ item?item.quantity++:cart.push({...products[i],quantity:1});
+ showToast("✅ Added to cart!");
+ renderCart();
+}
 
-    // Men’s Care
-     { name: "Marie’s Hugo Boss for men eau de toilette ", price: 400, category: "mens_care",
-    img: "https://i.postimg.cc/NGbYPNjG/1.jpg",
-    description: "50ml" },
-    { name: "Marie’s Sauvage Elixir for men eau de toilette", price: 400, category: "mens_care",
-    img: "https://i.postimg.cc/rmW07911/1.jpg",
-    description: "50ml" },
-      { name: "Marie’s Bleu de Channel  for men eau de toilette ", price: 400, category: "mens_care",
-    img: "https://i.postimg.cc/Jz2snFPV/1.jpg",
-    description: "50ml" },
-     { name: "Marie’s Bad Boy for men eau de toilette", price: 400, category: "mens_care",
-    img: "https://i.postimg.cc/QdwMsTxz/1.jpg",
-    description: "50ml" },
-     { name: "Marie’s Side Effects for men eau de toilette", price: 400, category: "mens_care",
-    img: "https://i.postimg.cc/Tw9GyLfM/1.jpg",
-    description: "50ml" },
+// ✅ Remove single item
+function removeItem(i){
+ cart.splice(i,1);
+ renderCart();
+}
 
-  { name: "Marie’s Stronger with you intensely for men eau de toilette ", price: 400, category: "mens_care",
-    img: "https://i.postimg.cc/qRjVJPxp/1.jpg",
-    description: "50ml" },
-     { name: "Marie’s Mercedes Benz for men eau de toilette", price: 400, category: "mens_care",
-    img: "https://i.postimg.cc/XYFRGGgN/1.jpg",
-    description: "50ml" },
+// ✅ Render Cart
+function renderCart(){
+ let ul=document.getElementById("cart-items"); ul.innerHTML="";
+ let total=0;
 
+ cart.forEach((item,i)=>{
+  total+=item.price*item.quantity;
+  ul.innerHTML+=`
+   <li>
+     ${item.name} x${item.quantity} = ${item.price*item.quantity} LE
+     <button onclick="removeItem(${i})" style="color:red;font-weight:bold">✖</button>
+   </li>`;
+ });
 
+ document.getElementById("total").innerText=total;
+}
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-  ];
-
-
- 
- 
- 
-
-let cart = [];
-
-/* Renders products */
-function renderProducts() {
-  const sections = {
-    Perfumes: document.getElementById("perfumes-container"),
-    lips_care: document.getElementById("lips_care-container"),
-    skin_care: document.getElementById("skin_care-container"),
-    body_care: document.getElementById("body_care-container"),
-    hair_care: document.getElementById("hair_care-container"),
-    sunscreens_care: document.getElementById("sunscreens_care-container"), 
-  mens_care: document.getElementById("mens_care-container") // 👈 Added
+// ✅ toggle cart drawer
+document.getElementById("toggleCart").onclick=()=>{
+ document.getElementById("cart").classList.toggle("show");
 };
 
+// ✅ Toggle categories accordion
+document.querySelectorAll(".category h2").forEach(h=>{
+ h.onclick=()=>{
+  let box=h.parentElement;
+  box.classList.toggle("open");
+  let c=box.querySelector(".container");
+  c.style.display=c.style.display==="grid"?"none":"grid";
 
-  Object.values(sections).forEach(sec => sec.innerHTML = "");
-
-  products.forEach((product, idx) => {
-    const div = document.createElement("div");
-    div.className = "product";
-    div.innerHTML = `
-      <img src="${product.img}" alt="${product.name}" loading="lazy" />
-      <h3>${product.name}</h3>
-      <h4>${product.description}</h4>
-      <div class="price">${product.price} LE</div>
-      <button data-idx="${idx}">Add to Cart</button>
-    `;
-    const container = sections[product.category];
-    if (container) container.appendChild(div);
-  });
-
-  document.querySelectorAll('.product button').forEach(btn => {
-    btn.addEventListener('click', () => {
-      const index = Number(btn.dataset.idx);
-      addToCartByIndex(index);
-    });
-  });
-}
-
-/* ✅ Allow only 1 category open at a time */
-function enableCategoryToggle() {
-  const categories = document.querySelectorAll('.category');
-  categories.forEach(category => {
-    const title = category.querySelector('h2');
-    const container = category.querySelector('.container');
-    title.addEventListener('click', () => {
-      categories.forEach(c => {
-        if (c !== category) {
-          c.classList.remove('open');
-          c.querySelector('.container').style.display = 'none';
-        }
-      });
-      const isOpen = category.classList.toggle('open');
-      container.style.display = isOpen ? 'grid' : 'none';
-    });
-  });
-}
-
-/* Cart logic */
-function addToCartByIndex(index) {
-  cart.push(products[index]);
-  renderCart();
-}
-
-function renderCart() {
-  const list = document.getElementById("cart-items");
-  const totalEl = document.getElementById("total");
-  const orderLink = document.getElementById("orderLink");
-
-  list.innerHTML = "";
-
-  let total = 0;
-  cart.forEach((item, i) => {
-    total += item.price;
-    const li = document.createElement("li");
-    li.innerHTML = `${item.name} - LE ${item.price} <button class="remove-btn" data-i="${i}">✖</button>`;
-    list.appendChild(li);
-  });
-
-  totalEl.textContent = total;
-
-  const name = document.getElementById("customerName").value || "Customer";
-  const phone = document.getElementById("customerPhone").value || "No phone";
-
-  const message = encodeURIComponent(
-    `Order from ${name} (${phone}):\n` +
-    cart.map(item => `- ${item.name} (${item.price} LE)`).join("\n") +
-    `\nTotal: ${total} LE`
-  );
-
-  orderLink.href = `https://wa.me/201276740902?text=${message}`;
-
-  document.querySelectorAll(".remove-btn").forEach(btn => {
-    btn.addEventListener("click", () => {
-      const idx = Number(btn.dataset.i);
-      cart.splice(idx, 1);
-      renderCart();
-    });
-  });
-}
-
-/* Cart toggle button */
-document.getElementById("cartToggleBtn").addEventListener("click", () => {
-  document.getElementById("cart").classList.toggle("show");
+  document.querySelectorAll(".category").forEach(o=>{
+   if(o!==box){o.classList.remove("open");o.querySelector(".container").style.display="none"}
+ });
+ };
 });
 
 renderProducts();
-enableCategoryToggle();
 renderCart();
-document.getElementById("customerName").addEventListener("input", renderCart);
-document.getElementById("customerPhone").addEventListener("input", renderCart);
-
 </script>
-
 </body>
 </html>
