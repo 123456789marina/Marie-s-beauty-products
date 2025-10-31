@@ -1,101 +1,293 @@
   <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
 <title>Marie’s Beauty Products</title>
-
 <style>
-:root{
- --pink-100:#fff0f6;
- --pink-200:#ffd6e8;
- --pink-300:#ffb6d9;
- --pink-400:#ff79b0;
- --green:#25d366;
-}
-body{margin:0;background:var(--pink-100);font-family:Arial}
-header{text-align:center;padding:20px;background:linear-gradient(var(--pink-300),var(--pink-200));color:#fff}
+  :root{
+    --pink-100: #fff0f6;
+    --pink-200: #ffd6e8;
+    --pink-300: #ffb6d9;
+    --pink-400: #ff79b0;
+    --accent-green: #25d366;
+    --muted: #666;
+    --card-shadow: 0 6px 18px rgba(0,0,0,0.08);
+  }
 
-.main-content{padding:20px;display:flex;flex-wrap:wrap;gap:15px}
-.category{flex:1 1 300px}
-.category h2{
- background:var(--pink-400);padding:10px;border-radius:8px;color:#fff;
- cursor:pointer;position:relative
-}
-.category h2::after{content:"+";position:absolute;right:10px;font-weight:bold}
-.category.open h2::after{content:"-"}
-.container{display:none;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:12px}
+  * { box-sizing: border-box; }
 
-.product{
- background:#fff;padding:10px;border-radius:10px;text-align:center;
- box-shadow:0 4px 10px rgba(0,0,0,0.08)
-}
-.product img{width:100%;height:140px;object-fit:cover;border-radius:8px}
-.product button{margin-top:auto;background:var(--pink-400);color:#fff;border:none;padding:8px;border-radius:6px;cursor:pointer;width:100%}
+  body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    background: var(--pink-100);
+    color: #222;
+  }
 
-.cart{
- position:fixed;top:0;right:-350px;width:330px;height:100%;background:#fff;padding:15px;
- border-left:2px solid #ddd;transition:.3s;z-index:10
-}
-.cart.show{right:0}
-#cart-items li{
- background:#fafafa;padding:8px;border-radius:6px;margin:5px 0;
- display:flex;justify-content:space-between;font-size:14px
-}
-.cart-toggle{
- position:fixed;bottom:20px;right:20px;background:var(--pink-400);
- color:#fff;padding:15px;border-radius:50%;border:none;cursor:pointer;font-size:20px
-}
+  header {
+    text-align: center;
+    padding: 26px 16px;
+    background: linear-gradient(180deg,var(--pink-300),var(--pink-200));
+    color: white;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.06);
+  }
+  header h1 { margin: 0; font-size: 24px; letter-spacing: 0.2px; }
+  header p { margin: 6px 0 0; font-size: 14px; opacity: 0.95; }
 
-/* ✅ toast box */
-#toast{
- position:fixed;bottom:90px;right:20px;background:var(--pink-400);color:#fff;
- padding:12px 15px;border-radius:10px;font-weight:bold;display:none;
- animation:fade 2.4s forwards
-}
-@keyframes fade{
- 0%{opacity:0;transform:translateY(10px)}
- 15%{opacity:1;transform:translateY(0)}
- 85%{opacity:1}
- 100%{opacity:0}
-}
+  .main-content {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 18px;
+    padding: 22px;
+    align-items: flex-start;
+  }
+
+  .category {
+    flex: 1 1 300px;
+    min-width: 260px;
+    max-width: 360px;
+    background: transparent;
+  }
+
+  .category h2 {
+    margin: 0 0 12px 0;
+    background: var(--pink-400);
+    color: white;
+    padding: 10px 12px;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 52px;
+    font-size: 18px;
+    text-align: center;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.06);
+    cursor: pointer;
+    position: relative;
+  }
+
+  .category h2::after {
+    content: "＋";
+    position: absolute;
+    right: 12px;
+    font-weight: bold;
+  }
+
+  .category.open h2::after {
+    content: "−";
+  }
+
+  .container {
+    display: none;
+    grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+    gap: 12px;
+  }
+
+  .product {
+    background: white;
+    border-radius: 12px;
+    padding: 10px;
+    text-align: center;
+    box-shadow: var(--card-shadow);
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    min-height: 260px;
+  }
+
+  .product img {
+    width: 100%;
+    height: 140px;
+    object-fit: cover;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.05) inset;
+  }
+
+  .product h3 {
+    margin: 0;
+    font-size: 14px;
+    line-height: 1.15;
+    min-height: 34px;
+  }
+
+  .product p {
+    margin: 0;
+    font-size: 12px;
+    color: var(--muted);
+    min-height: 34px;
+  }
+
+  .product .price {
+    margin-top: auto;
+    font-weight: bold;
+    font-size: 14px;
+    color: #222;
+  }
+
+  .product button {
+    margin-top: 8px;
+    background: var(--pink-400);
+    color: white;
+    border: none;
+    padding: 9px 10px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: 600;
+  }
+  .product button:hover { transform: translateY(-1px); }
+
+  .cart {
+    position: fixed;
+    right: -360px;
+    top: 0;
+    width: 340px;
+    height: 100%;
+    background: white;
+    box-shadow: -12px 0 30px rgba(0,0,0,0.08);
+    padding: 20px;
+    transition: right 0.28s ease;
+    overflow-y: auto;
+    z-index: 1200;
+  }
+
+  .cart.show { right: 0; }
+
+  .cart h2 { margin: 0 0 8px 0; font-size: 20px; }
+  .cart label { display:block; font-size:13px; margin-top:10px; color:#333; }
+  .cart input[type="text"] {
+    width: 100%;
+    padding: 10px;
+    border-radius: 8px;
+    border: 1px solid #eee;
+    margin-top:6px;
+    font-size:14px;
+  }
+
+  #cart-items { list-style:none; padding:0; margin:12px 0; }
+  #cart-items li {
+    padding: 8px 6px;
+    border-radius: 6px;
+    background: #fafafa;
+    margin-bottom:8px;
+    font-size: 13px;
+    display:flex;
+    justify-content: space-between;
+    gap: 8px;
+    align-items:center;
+  }
+
+  #cart-items li .remove-btn {
+    background: transparent;
+    border: none;
+    color: var(--muted);
+    cursor: pointer;
+    font-size: 12px;
+  }
+
+  .total-row { margin-top: 10px; font-weight:700; font-size:16px; }
+  .order-btn {
+    display:block;
+    margin-top:12px;
+    background: var(--accent-green);
+    color: white;
+    padding: 12px;
+    text-align:center;
+    text-decoration:none;
+    border-radius: 10px;
+    font-weight:700;
+  }
+
+  .cart-toggle {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    background: var(--pink-400);
+    color: white;
+    padding: 12px 14px;
+    border-radius: 50%;
+    border: none;
+    cursor: pointer;
+    font-size: 20px;
+    box-shadow: 0 6px 18px rgba(0,0,0,0.12);
+    z-index: 1250;
+  }
+
+  @media (max-width: 1100px) {
+    .main-content { padding: 14px; }
+    .category { max-width: none; flex-basis: 100%; }
+    .cart { width: 100%; right: -100%; height: 50%; bottom: 0; top: auto; border-radius: 12px 12px 0 0; padding-bottom: 36px; }
+    .cart.show { right: 0; right: 0; bottom: 0; }
+    .cart-toggle { right: 18px; bottom: 18px; }
+  }
 </style>
 </head>
-
 <body>
+
 <header>
-<h1>Marie’s Beauty Store</h1>
-<p>Skin • Hair • Perfumes & more 💗</p>
+  <h1>Marie’s Beauty Products</h1>
+  <p>For skin care, hair care and perfumes</p>
 </header>
 
 <div class="main-content">
- <div class="category"><h2>Perfumes</h2><div class="container" id="perfumes-container"></div></div>
- <div class="category"><h2>Lips Care</h2><div class="container" id="lipscare-container"></div></div>
- <div class="category"><h2>Skin Care</h2><div class="container" id="skincare-container"></div></div>
- <div class="category"><h2>Body Care</h2><div class="container" id="bodycare-container"></div></div>
- <div class="category"><h2>Hair Care</h2><div class="container" id="haircare-container"></div></div>
- <div class="category"><h2>Sunscreens</h2><div class="container" id="sunscreens-container"></div></div>
- <div class="category"><h2>Men's Care</h2><div class="container" id="menscare-container"></div></div>
+  <div class="category">
+    <h2>Perfumes</h2>
+    <div class="container" id="perfumes-container"></div>
+  </div>
+
+  <div class="category">
+    <h2>Lips Care</h2>
+    <div class="container" id="lips_care-container"></div>
+  </div>
+
+  <div class="category">
+    <h2>Skin Care</h2>
+    <div class="container" id="skin_care-container"></div>
+  </div>
+
+  <div class="category">
+    <h2>Body Care</h2>
+    <div class="container" id="body_care-container"></div>
+  </div>
+
+  <div class="category">
+    <h2>Hair Care</h2>
+    <div class="container" id="hair_care-container"></div>
+  </div>
+
+  <div class="category">
+    <h2>Sunscreens</h2>
+    <div class="container" id="sunscreens_care-container"></div>
+  </div>
+
+  <div class="category">
+  <h2>Men’s Care</h2>
+  <div class="container" id="mens_care-container"></div>
 </div>
+</div>
+
+
 
 <div class="cart" id="cart">
-<h2>Cart</h2>
-<ul id="cart-items"></ul>
-<p><b>Total: LE <span id="total">0</span></b></p>
+  <h2>Cart</h2>
+  <label for="customerName">Your Name:</label>
+  <input type="text" id="customerName" placeholder="Enter your name">
+  <label for="customerPhone">Your Phone Number:</label>
+  <input type="text" id="customerPhone" placeholder="Enter your phone number">
+  <ul id="cart-items"></ul>
+  <p class="total-row">Total: LE <span id="total">0</span></p>
+  <a id="orderLink" class="order-btn" target="_blank" rel="noopener">Send Order via WhatsApp</a>
 </div>
 
-<button class="cart-toggle" id="toggleCart">🛒</button>
-<div id="toast"></div>
+<button class="cart-toggle" id="cartToggleBtn" aria-label="Open cart">🛒</button>
 
 <script>
-// ✅ Products list
+/* ✅ PART 2 WILL START WITH: const products = [...] */
  const products = [
   // Perfumes
-  { name: "Kayali sparkling lychee", price: 400, category: "Perfumes",
+   { name: "Kayali sparkling lychee", price: 400, category: "Perfumes",
     img: "https://i.postimg.cc/qv9NnMYr/1d7b4e95-b7e8-4719-8d4d-6965032d9e47.jpg",
     description: "50 ml" },
-   
-    { name: "Marie’s La belle eau de toilette", price: 400, category: "Perfumes",
+  { name: "Marie’s La belle eau de toilette", price: 400, category: "Perfumes",
     img: "https://i.postimg.cc/K8rYKrns/c1b8e16b-b38d-4d6d-815d-66eb324624c2.jpg",
     description: "50 ml" },
   { name: "Marie’s Body Splash 120ml", price: 300, category: "Perfumes",
@@ -461,112 +653,161 @@ header{text-align:center;padding:20px;background:linear-gradient(var(--pink-300)
 
 
 
-
-
-
-
-
-
-
-
-
   ];
 
 
  
+ 
+ 
 
-let cart=[];
+let cart = [];
 
-// ✅ Show products in right container
-function renderProducts(){
- const prefix = {
-   "perfumes":"perfumes-container",
-   "lips care":"lipscare-container",
-   "skin care":"skincare-container",
-   "body care":"bodycare-container",
-   "hair care":"haircare-container",
-   "sunscreens":"sunscreens-container",
-   "men's care":"menscare-container"
- };
-
- Object.values(prefix).forEach(id=>document.getElementById(id).innerHTML="");
-
- products.forEach((p,i)=>{
-  let key = p.category.toLowerCase();
-  let target = prefix[key];
-  if(!target)return;
-
-  document.getElementById(target).innerHTML+=`
-  <div class="product">
-   <img src="${p.img}">
-   <h3>${p.name}</h3>
-   <p>${p.description}</p>
-   <b>${p.price} LE</b><br>
-   <button onclick="addToCart(${i})">Add to Cart</button>
-  </div>`;
- });
-}
-
-// ✅ Toast message
-function showToast(msg){
- let t=document.getElementById("toast");
- t.innerText=msg;
- t.style.display="block";
- setTimeout(()=>t.style.display="none",2200);
-}
-
-// ✅ Add to cart
-function addToCart(i){
- let item=cart.find(x=>x.name===products[i].name);
- item?item.quantity++:cart.push({...products[i],quantity:1});
- showToast("✅ Added to cart!");
- renderCart();
-}
-
-// ✅ Remove single item
-function removeItem(i){
- cart.splice(i,1);
- renderCart();
-}
-
-// ✅ Render Cart
-function renderCart(){
- let ul=document.getElementById("cart-items"); ul.innerHTML="";
- let total=0;
-
- cart.forEach((item,i)=>{
-  total+=item.price*item.quantity;
-  ul.innerHTML+=`
-   <li>
-     ${item.name} x${item.quantity} = ${item.price*item.quantity} LE
-     <button onclick="removeItem(${i})" style="color:red;font-weight:bold">✖</button>
-   </li>`;
- });
-
- document.getElementById("total").innerText=total;
-}
-
-// ✅ toggle cart drawer
-document.getElementById("toggleCart").onclick=()=>{
- document.getElementById("cart").classList.toggle("show");
+/* Renders products */
+function renderProducts() {
+  const sections = {
+    Perfumes: document.getElementById("perfumes-container"),
+    lips_care: document.getElementById("lips_care-container"),
+    skin_care: document.getElementById("skin_care-container"),
+    body_care: document.getElementById("body_care-container"),
+    hair_care: document.getElementById("hair_care-container"),
+    sunscreens_care: document.getElementById("sunscreens_care-container"), 
+  mens_care: document.getElementById("mens_care-container") // 👈 Added
 };
 
-// ✅ Toggle categories accordion
-document.querySelectorAll(".category h2").forEach(h=>{
- h.onclick=()=>{
-  let box=h.parentElement;
-  box.classList.toggle("open");
-  let c=box.querySelector(".container");
-  c.style.display=c.style.display==="grid"?"none":"grid";
 
-  document.querySelectorAll(".category").forEach(o=>{
-   if(o!==box){o.classList.remove("open");o.querySelector(".container").style.display="none"}
- });
- };
+  Object.values(sections).forEach(sec => sec.innerHTML = "");
+
+  products.forEach((product, idx) => {
+    const div = document.createElement("div");
+    div.className = "product";
+    div.innerHTML = `
+      <img src="${product.img}" alt="${product.name}" loading="lazy" />
+      <h3>${product.name}</h3>
+      <h4>${product.description}</h4>
+      <div class="price">${product.price} LE</div>
+      <button data-idx="${idx}">Add to Cart</button>
+    `;
+    const container = sections[product.category];
+    if (container) container.appendChild(div);
+  });
+
+  document.querySelectorAll('.product button').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const index = Number(btn.dataset.idx);
+      addToCartByIndex(index);
+    });
+  });
+}
+
+/* ✅ Allow only 1 category open at a time */
+function enableCategoryToggle() {
+  const categories = document.querySelectorAll('.category');
+  categories.forEach(category => {
+    const title = category.querySelector('h2');
+    const container = category.querySelector('.container');
+    title.addEventListener('click', () => {
+      categories.forEach(c => {
+        if (c !== category) {
+          c.classList.remove('open');
+          c.querySelector('.container').style.display = 'none';
+        }
+      });
+      const isOpen = category.classList.toggle('open');
+      container.style.display = isOpen ? 'grid' : 'none';
+    });
+  });
+}
+
+/* Cart logic */
+ function addToCartByIndex(index) {
+  cart.push(products[index]);
+  renderCart();
+  showAddAlert();
+}
+
+
+ function renderCart() {
+  const list = document.getElementById("cart-items");
+  const totalEl = document.getElementById("total");
+  const orderLink = document.getElementById("orderLink");
+
+  list.innerHTML = "";
+
+  let total = 0;
+  cart.forEach((item, i) => {
+    total += item.price;
+    const li = document.createElement("li");
+    li.innerHTML = `${item.name} - LE ${item.price} 
+      <button class="remove-btn" data-i="${i}" style="color:red;font-weight:bold">✖</button>`;
+    list.appendChild(li);
+  });
+
+  totalEl.textContent = total;
+
+  const name = document.getElementById("customerName").value || "Customer";
+  const phone = document.getElementById("customerPhone").value || "No phone";
+
+  const message = encodeURIComponent(
+    `Order from ${name} (${phone}):\n` +
+    cart.map(item => `- ${item.name} (${item.price} LE)`).join("\n") +
+    `\nTotal: ${total} LE`
+  );
+
+  orderLink.href = `https://wa.me/201276740902?text=${message}`;
+
+  document.querySelectorAll(".remove-btn").forEach(btn => {
+    btn.addEventListener("click", () => {
+      const idx = Number(btn.dataset.i);
+      cart.splice(idx, 1);
+      renderCart();
+    });
+  });
+}
+
+/* Alert when adding */
+function showAddAlert() {
+  const alertBox = document.getElementById("addAlert");
+  alertBox.style.display = "block";
+  setTimeout(() => alertBox.style.display = "none", 1000);
+}
+
+/* Cart toggle button */
+document.getElementById("cartToggleBtn").addEventListener("click", () => {
+  document.getElementById("cart").classList.toggle("show");
 });
 
+
 renderProducts();
+enableCategoryToggle();
 renderCart();
+document.getElementById("customerName").addEventListener("input", renderCart);
+document.getElementById("customerPhone").addEventListener("input", renderCart);
+function showAddAlert() {
+  const alertBox = document.getElementById("addAlert");
+  alertBox.style.display = "block";
+  setTimeout(() => {
+    alertBox.style.display = "none";
+  }, 1200);
+}
+function removeItem(index){
+  cart.splice(index, 1);
+  renderCart();
+}
+
 </script>
+<div id="addAlert" style="
+ position: fixed;
+ top: 20px;
+ right: 20px;
+ background: #28a745;
+ color: white;
+ padding: 10px 15px;
+ border-radius: 8px;
+ display: none;
+ font-weight: bold;
+ z-index: 9999;
+">✔ Added to cart</div>
+ 
+
 </body>
 </html>
